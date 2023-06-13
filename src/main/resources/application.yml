@@ -1,1 +1,6 @@
-
+spring:
+  profiles:
+    default: local
+    group:
+      local: thymeleaf-local
+      prod: thymeleaf-prod
