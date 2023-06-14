@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>회원 가입</title>
+
+    <div th:replace="~{../../templates/component/common :: head}"></div>
+</head>
+
+<body>
+    <div th:insert="~{../../templates/component/common :: header}"></div>
+
+    <div class="container text-center root rounded-4 shadow border border-dark" >
+        <div class="row">
+            <!--로고 삽입-->
+            <div class="col" th:insert="~{../../templates/component/login :: img-logo}"></div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <h1>
+                    Sign Up
+                </h1>
+            </div>
+        </div>
+
+        <div class="row">
+            <!--이메일 입력창-->
+            <div class="col" th:insert="~{../../templates/component/login :: text-email}"></div>
+        </div>
+
+        <div class="row">
+            <!--비밀 번호 입력창-->
+            <div class="col" th:insert="~{../../templates/component/login :: text-password}"></div>
+        </div>
+
+        <div class="row">
+            <!--비밀 번호 재확인창-->
+            <div class="col" th:insert="~{../../templates/component/login :: text-password-again}"></div>
+        </div>
+
+        <div class="row">
+            <!--닉네임 입력창-->
+            <div class="col" th:insert="~{../../templates/component/login :: text-nickname}"></div>
+        </div>
+
+        <div class="row login-btn-tools">
+            <!--로그인 버튼-->
+            <div class="col-auto">
+                <div class="col" th:insert="~{../../templates/component/login :: btn-login-href}"></div>
+            </div>
+
+            <div class="col"></div>
+        </div>
+
+        <div class="row">
+            <!--회원가입 버튼-->
+            <div class="col" th:insert="~{../../templates/component/login :: btn-signup-completion}"></div>
+        </div>
+    </div>
+
+    <div th:insert="~{../../templates/component/common :: footer}"></div>
+</body>
+
+</html>
