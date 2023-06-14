@@ -139,9 +139,88 @@
 
 
 <div th:fragment="btn-signup">
-    <button type="button" class="root-btn btn btn-secondary" th:onclick="|javascript:navigateTo('@{/create/user}')|">
+    <button type="button" class="root-btn btn btn-secondary" th:onclick="|javascript:navigateTo('@{/user/create}')|">
         회원 가입
     </button>
+</div>
+
+
+<div th:fragment="text-password-again">
+    <div class="input-group input-group-lg mb-3">
+        <span class="input-group-text">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-all" viewBox="0 0 16 16">
+              <path d="M8.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L2.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093L8.95 4.992a.252.252 0 0 1 .02-.022zm-.92 5.14.92.92a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 1 0-1.091-1.028L9.477 9.417l-.485-.486-.943 1.179z"/>
+            </svg>
+        </span>
+        <input id="text-pw-again" type="password" class="form-control" placeholder="Password Again" aria-label="Password">
+        <button id="button-pw-delete-again" class="btn btn-outline-dark" type="button" onclick="clearInputAgain()" >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+            </svg>
+        </button>
+    </div>
+
+    <script>
+        function clearInputAgain() {
+            var input = document.getElementById('text-pw-again');
+            input.value = '';
+        }
+    </script>
+</div>
+
+
+<div th:fragment="text-nickname">
+    <div class="input-group input-group-lg mb-3">
+        <span class="input-group-text">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-tags-fill" viewBox="0 0 16 16">
+              <path d="M2 2a1 1 0 0 1 1-1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 2 6.586V2zm3.5 4a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
+              <path d="M1.293 7.793A1 1 0 0 1 1 7.086V2a1 1 0 0 0-1 1v4.586a1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l.043-.043-7.457-7.457z"/>
+            </svg>
+        </span>
+        <input id="text-nickname" type="text" class="form-control" placeholder="Nickname">
+    </div>
+</div>
+
+
+<div th:fragment="btn-login-href">
+    <button type="button" class="root-btn btn btn-secondary" th:onclick="|javascript:navigateTo('@{/auth/login}')|">
+        로그인
+    </button>
+</div>
+
+
+<div th:fragment="btn-signup-completion" class="d-grid gap-2">
+    <button type="button" class="btn btn-secondary" onclick="clickSignUp()">
+        회원 가입
+    </button>
+
+    <script>
+        function clickSignUp() {
+            const email = document.getElementById('text-email-username').value;
+            const server = document.getElementById('text-email-server').value;
+            const pw = document.getElementById('text-pw').value;
+            const pw_again = document.getElementById('text-pw-again').value;
+            const nickname = document.getElementById('text-nickname').value;
+
+            if(!hasSomethingInString(email) || !hasSomethingInString(server) || !hasSomethingInString(pw) || !hasSomethingInString(nickname)) {
+                doWhenErr("빈 칸을 채워주세요.");
+                return ;
+            }
+
+            if(!hasSomethingInString(pw_again) || pw != pw_again) {
+                doWhenErr("비밀번호 확인란의 값이 다릅니다. 다시 확인해주세요.");
+                return ;
+            }
+
+            post(`/api/v1/user`, {
+                body: {
+                    email: `${email}@${server}`,
+                    password: pw,
+                    nickname: nickname,
+                },
+            }).catch(doWhenErr);
+        }
+    </script>
 </div>
 
 
