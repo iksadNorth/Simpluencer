@@ -2,5 +2,5 @@ spring:
   profiles:
     default: local
     group:
-      local: thymeleaf-local
+      local: thymeleaf-local, datasource-local, h2db-local
       prod: thymeleaf-prod
