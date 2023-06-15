@@ -83,6 +83,11 @@ function request(url, options) {
     },
   }
 
+  // csrf 토큰 추가.
+  const csrfToken = document.getElementById('_csrf').content;
+  const csrfKey = document.getElementById('_csrf_header').content;
+  options.headers[csrfKey] = csrfToken;
+
   // 데이터 형식 추가.
   if(!hasSomethingInString(options.headers['Content-Type'])) {
     options.headers['Content-Type'] = 'application/json';
