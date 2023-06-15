@@ -42,6 +42,13 @@ function addParams(url, params) {
     return url_obj.pathname + url_obj.search;
 }
 
+// Content-Type을 form 형식으로
+function getHeaderForm() {
+    return {
+        'Content-Type': 'application/x-www-form-urlencoded',
+    };
+}
+
 // 날짜 처리를 위한 메서드.
 function toDate(isoDateTimeString) {
     return format(new Date(isoDateTimeString), "yy/MM/dd").toString();
@@ -77,7 +84,9 @@ function request(url, options) {
   }
 
   // 데이터 형식 추가.
-  options.headers['Content-Type'] = 'application/json';
+  if(!hasSomethingInString(options.headers['Content-Type'])) {
+    options.headers['Content-Type'] = 'application/json';
+  }
 
   // 요청 설정 로깅.
   console.log(`[${options.method ?? "GET"}] \n${url}`);

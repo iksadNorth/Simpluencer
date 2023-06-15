@@ -1,0 +1,4 @@
+spring:
+  datasource:
+    username: simpluencer-team
+    password: 1234

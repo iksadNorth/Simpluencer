@@ -127,11 +127,13 @@
                 return ;
             }
 
+            const formData = new URLSearchParams();
+            formData.append('username', `${email}@${server}`);
+            formData.append('password', pw);
+
             post(`/api/v1/auth/login`, {
-                body: {
-                    email: `${email}@${server}`,
-                    password: pw,
-                },
+                headers: getHeaderForm(),
+                body: formData.toString(),
             }).catch(doWhenErr);
         }
     </script>
