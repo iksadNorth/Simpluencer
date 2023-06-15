@@ -7,6 +7,9 @@
         <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
         <!--    project css -->
         <link rel="stylesheet" th:href="@{/css/style.css}">
+        <!--    csrf 토큰-->
+        <meta id="_csrf_header" th:content="${_csrf.headerName}"/>
+        <meta id="_csrf" th:content="${_csrf.token}"/>
     </div>
 
     <div th:fragment="header">

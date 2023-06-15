@@ -52,8 +52,6 @@ public class AuthenticationConfig {
                                 .logoutSuccessUrl("/auth/login")
                 )
 
-                .csrf(CsrfConfigurer::disable)
-
                 .anonymous(AbstractHttpConfigurer::disable)
 
                 .build();
