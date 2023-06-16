@@ -6,21 +6,22 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.io.Serializable;
-
 @Entity
-@Table(name = "role_of_agent") @IdClass(RoleOfAgent.RoleOfAgentKey.class)
+@Table(name = "role_of_agent", indexes = {
+        @Index(columnList = "agent_id"),
+        @Index(columnList = "role")
+})
 @NoArgsConstructor @Getter @Setter
-public class RoleOfAgent {
-    @NoArgsConstructor @Getter @Setter
-    public class RoleOfAgentKey implements Serializable {
-        private static final long serialVersionUID = 3735029399522186249L;
-        private Agent agent;
-        private RoleType role;
-    }
-
-    @Id @ManyToOne
+public class RoleOfAgent extends BaseEntity {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "agent_id", nullable = false)
     private Agent agent;
-    @Id @Convert(converter = RoleType.ConverterImpl.class)
+    @Convert(converter = RoleType.ConverterImpl.class)
     private RoleType role;
+
+    public static RoleOfAgent of(RoleType role) {
+        RoleOfAgent entity = new RoleOfAgent();
+        entity.setRole(role);
+        return entity;
+    }
 }

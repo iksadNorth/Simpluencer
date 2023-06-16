@@ -215,11 +215,11 @@
             }
 
             post(`/api/v1/user`, {
-                body: {
+                body: JSON.stringify({
                     email: `${email}@${server}`,
                     password: pw,
                     nickname: nickname,
-                },
+                }),
             }).catch(doWhenErr);
         }
     </script>
