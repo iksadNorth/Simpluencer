@@ -8,6 +8,11 @@ import java.util.function.Function;
 
 @RequiredArgsConstructor @Getter
 public enum ErrorType implements SimpluencerException {
+    EMAIL_NOT_FOUND(
+            HttpStatus.NOT_FOUND,
+            "해당 이메일은 존재하지 않습니다.",
+            args -> String.format("존재하지 않는 이메일로 접근.\nemail|%s", args)
+    ),
     DATA_INTEGRITY_VIOLATION(
             HttpStatus.BAD_REQUEST,
             "비정상적인 입력 값이 들어왔습니다.",

@@ -102,9 +102,9 @@
             }
 
             patch(`/api/v1/user/unknown/password`, {
-                body: {
+                body: JSON.stringify({
                     email: `${email}@${server}`,
-                },
+                }),
             }).then(info).catch(doWhenErr);
         }
     </script>

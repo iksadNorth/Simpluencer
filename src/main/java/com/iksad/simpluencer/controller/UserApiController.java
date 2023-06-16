@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import static com.iksad.simpluencer.utils.ResponseEntityUtils.getOkResponse;
 import static com.iksad.simpluencer.utils.ResponseEntityUtils.getRedirectionResponse;
 
 @Controller
@@ -27,6 +28,7 @@ public class UserApiController {
 
     @PatchMapping("/unknown/password")
     public ResponseEntity<Void> resetPassword(@RequestBody ResetPasswordRequest request) {
-        return null;
+        agentService.resetPassword(request);
+        return getOkResponse();
     }
 }

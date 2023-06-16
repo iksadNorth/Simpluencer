@@ -158,5 +158,8 @@ gradle-app.setting
 *.hprof
 
 # 사용자 정의
+src/main/resources/application-email-local.yml
+src/main/resources/application-email-prod.yml
+src/main/resources/application-datasource-prod.yml
 
 # End of https://www.toptal.com/developers/gitignore/api/linux,intellij+all,gradle,java
