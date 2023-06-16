@@ -3,13 +3,17 @@ package com.iksad.simpluencer.repository;
 import com.iksad.simpluencer.config.PasswordEncoderConfig;
 import com.iksad.simpluencer.entity.Agent;
 import com.iksad.simpluencer.entity.RoleOfAgent;
+import com.iksad.simpluencer.exception.ParserExceptionFactoryImpl.NotNullViolationParser;
+import com.iksad.simpluencer.exception.ParserExceptionFactoryImpl.UniqueViolationParser;
 import com.iksad.simpluencer.fixture.AgentFixture;
+import com.iksad.simpluencer.model.ParsedExceptionResult;
 import com.iksad.simpluencer.model.request.UserRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -17,6 +21,7 @@ import java.util.Iterator;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Slf4j
 @ActiveProfiles(profiles = {"datasource-local", "h2db-local"})
@@ -39,6 +44,63 @@ class AgentRepositoryTest {
         assertThat(optional.isPresent()).isTrue();
         optional.ifPresent(agent -> log.info(agent.toString()));
 
+    }
+
+    @Test @DisplayName("[save][비정상] 이미 존재하는 이메일")
+    @Sql(scripts = {"classpath:/data_init/create_agent.sql"})
+    void save_already_exist() {
+        // Given - 이미 존재하는 이메일인 경우,
+        Agent entity = new Agent();
+        entity.setEmail("mock email");
+        entity.setNickname("1");
+        entity.setPassword("1");
+
+        // When - 조회 시,
+        // then - 다음과 같은 결과가 나옴.
+        DataIntegrityViolationException e = assertThrows(DataIntegrityViolationException.class, () -> {
+            agentRepository.save(entity);
+        });
+
+        String message = e.getMessage();
+        log.info("e.getMessage()\n{}", message);
+        assertThat(message).isEqualTo("""
+                could not execute statement [Unique index or primary key violation: "PUBLIC.CONSTRAINT_INDEX_3 ON PUBLIC.AGENT(EMAIL NULLS FIRST) VALUES ( /* 2 */ 'mock email' )"; SQL statement:
+                insert into agent (created_at,email,nickname,password,id) values (?,?,?,?,default) [23505-214]] [insert into agent (created_at,email,nickname,password,id) values (?,?,?,?,default)]; SQL [insert into agent (created_at,email,nickname,password,id) values (?,?,?,?,default)]; constraint ["PUBLIC.CONSTRAINT_INDEX_3 ON PUBLIC.AGENT(EMAIL NULLS FIRST) VALUES ( /* 2 */ 'mock email' )"; SQL statement:
+                insert into agent (created_at,email,nickname,password,id) values (?,?,?,?,default) [23505-214]]
+                """.trim());
+
+        UniqueViolationParser parser = new UniqueViolationParser(e);
+        ParsedExceptionResult result = parser.parse();
+        assertThat(result.reason()).isEqualTo("Unique index or primary key violation");
+        assertThat(result.column()).isEqualTo("email");
+        assertThat(result.input()).isEqualTo("mock email");
+    }
+
+    @Test @DisplayName("[save][비정상] 빈 칸으로 들어온 이메일")
+    @Sql(scripts = {"classpath:/data_init/create_agent.sql"})
+    void save_as_null() {
+        // Given - 이미 존재하는 이메일인 경우,
+        Agent entity = new Agent();
+        entity.setEmail(null);
+        entity.setNickname("1");
+        entity.setPassword("1");
+
+        // When - 조회 시,
+        // then - 다음과 같은 결과가 나옴.
+        DataIntegrityViolationException e = assertThrows(DataIntegrityViolationException.class, () -> {
+            agentRepository.save(entity);
+        });
+
+        String message = e.getMessage();
+        log.info("e.getMessage()\n{}", message);
+        assertThat(message).isEqualTo("""
+                not-null property references a null or transient value : com.iksad.simpluencer.entity.Agent.email
+                """.trim());
+
+        NotNullViolationParser parser = new NotNullViolationParser(e);
+        ParsedExceptionResult result = parser.parse();
+        assertThat(result.reason()).isEqualTo("not-null property references a null or transient value");
+        assertThat(result.column()).isEqualTo("email");
     }
 
     @Test @DisplayName("[save][정상] Cascade.Persist 작동 여부")
