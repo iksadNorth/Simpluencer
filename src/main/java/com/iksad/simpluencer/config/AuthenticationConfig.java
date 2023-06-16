@@ -5,10 +5,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
+
+import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
 @Configuration
 @RequiredArgsConstructor
@@ -19,7 +20,10 @@ public class AuthenticationConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(
-                        b -> b.anyRequest().permitAll()
+                        b -> b
+                                .requestMatchers(antMatcher("/h2/**")).permitAll()
+                                .requestMatchers(antMatcher("/css/**"), antMatcher("/js/**")).permitAll()
+                                .anyRequest().permitAll()
                 )
 
                 .headers(
@@ -53,6 +57,11 @@ public class AuthenticationConfig {
                 )
 
                 .anonymous(AbstractHttpConfigurer::disable)
+
+                .csrf(
+                        b -> b
+                                .ignoringRequestMatchers(antMatcher("/h2/**"))
+                )
 
                 .build();
     }
