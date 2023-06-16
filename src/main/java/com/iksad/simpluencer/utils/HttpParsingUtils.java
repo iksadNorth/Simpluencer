@@ -1,11 +1,11 @@
 package com.iksad.simpluencer.utils;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Builder;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.util.Map;
@@ -32,8 +32,12 @@ public class HttpParsingUtils {
     public static Map<String, String[]> parseFormData(Arg dto) throws IOException {
         String requestBody = getBodyInRequest(dto);
 
-        TypeReference<Map<String, String[]>> typeRef = new TypeReference<>() {};
-        return dto.objectMapper.readValue(requestBody, typeRef);
+        return UriComponentsBuilder.fromUriString("?" + requestBody)
+                .build()
+                .getQueryParams()
+                .entrySet()
+                .stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().toArray(new String[0])));
     }
 
     public static <T> Optional<IOException> recordOnResponse(Arg dto, T response) {
