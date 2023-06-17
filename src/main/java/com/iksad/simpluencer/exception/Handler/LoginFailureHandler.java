@@ -3,7 +3,6 @@ package com.iksad.simpluencer.exception.Handler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iksad.simpluencer.exception.ErrorType.LoginFailType;
 import com.iksad.simpluencer.model.response.ErrorResponse;
-import com.iksad.simpluencer.utils.HttpParsingUtils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,7 +14,6 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.Map;
 
 import static com.iksad.simpluencer.utils.HttpParsingUtils.Arg;
 import static com.iksad.simpluencer.utils.HttpParsingUtils.recordOnResponse;
@@ -41,9 +39,8 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
                 .build();
 
         // server log
-        Map<String, String[]> formData = HttpParsingUtils.parseFormData(args);
-        String usernames = formData.get("username")[0];
-        String password = formData.get("password")[0];
+        String usernames = request.getParameter("username");
+        String password = request.getParameter("password");
 
         log.info(
                 type.getMessageForServer(usernames, password)

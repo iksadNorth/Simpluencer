@@ -118,6 +118,12 @@ function request(url, options) {
       console.log(`<-- 응답 Header: \n`, response.headers);
       return response;
     })
+    .then(response =>{
+      //// 리다이렉션이면 수동으로 url를 교체함.
+      if (response.redirected) {
+        window.location.href = response.url;
+      } return response;
+    })
     .then(response => {
       //// For Convert To Body.
       // [Blocking]여기서 응답 받을 때까지 대기함.
