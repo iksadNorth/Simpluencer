@@ -1,6 +1,7 @@
 package com.iksad.simpluencer.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.iksad.simpluencer.exception.ExceptionParserFactory.ExceptionParserFactory;
 import com.iksad.simpluencer.fixture.AgentFixture;
 import com.iksad.simpluencer.model.request.UserRequest;
 import com.iksad.simpluencer.service.AgentService;
@@ -28,6 +29,7 @@ class UserApiControllerTest {
     @Autowired ObjectMapper objectMapper;
     @Autowired private MockMvc mvc;
     @MockBean private AgentService agentService;
+    @MockBean private ExceptionParserFactory exceptionParserFactory;
 
     MockMvcTools tools;
 
