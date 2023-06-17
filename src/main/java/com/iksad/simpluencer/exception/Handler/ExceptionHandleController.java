@@ -1,9 +1,9 @@
 package com.iksad.simpluencer.exception.Handler;
 
 import com.iksad.simpluencer.exception.DataIntegrityViolationExceptionParser.DataIntegrityViolationExceptionParser;
+import com.iksad.simpluencer.exception.ErrorType.AbnormalDataIntegrityViolationType;
 import com.iksad.simpluencer.exception.ExceptionParserFactory.ExceptionParserFactory;
 import com.iksad.simpluencer.exception.SimpluencerException;
-import com.iksad.simpluencer.exception.ErrorType.AbnormalDataIntegrityViolationType;
 import com.iksad.simpluencer.model.response.ErrorResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

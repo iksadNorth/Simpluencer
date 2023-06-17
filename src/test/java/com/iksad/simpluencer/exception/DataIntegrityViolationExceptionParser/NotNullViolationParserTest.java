@@ -1,6 +1,6 @@
 package com.iksad.simpluencer.exception.DataIntegrityViolationExceptionParser;
 
-import com.iksad.simpluencer.exception.ErrorType.DataIntegrityViolationType;
+import com.iksad.simpluencer.exception.ErrorType.DataIntegrityViolationType.ParsedExceptionResult;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -38,7 +38,7 @@ class NotNullViolationParserTest {
         this.parser = new NotNullViolationParser(target);
 
         // then - 파싱 결과 출력.
-        DataIntegrityViolationType.ParsedExceptionResult result = this.parser.parse();
+        ParsedExceptionResult result = this.parser.parse();
         assertThat(result.reason()).isEqualTo("not-null property references a null or transient value");
         assertThat(result.column()).isEqualTo("email");
         assertThat(result.input()).isNull();
