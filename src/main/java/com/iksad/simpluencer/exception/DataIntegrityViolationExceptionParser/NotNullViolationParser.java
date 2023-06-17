@@ -1,6 +1,5 @@
 package com.iksad.simpluencer.exception.DataIntegrityViolationExceptionParser;
 
-import com.iksad.simpluencer.exception.ErrorType.DataIntegrityViolationType;
 import com.iksad.simpluencer.exception.ErrorType.DataIntegrityViolationType.ParsedExceptionResult;
 import org.springframework.dao.DataIntegrityViolationException;
 
