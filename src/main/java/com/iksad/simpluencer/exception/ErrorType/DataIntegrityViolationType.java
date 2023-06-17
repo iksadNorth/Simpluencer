@@ -25,7 +25,7 @@ public class DataIntegrityViolationType extends SimpluencerException {
 
     @Override
     public String getMessageForClient() {
-        return String.format("'%s'가 %s 값으로 입력됐습니다.",  this.result.column(), this.getInput());
+        return String.format(this.getComment(),  this.result.column(), this.getInput());
     }
 
     @Override
@@ -36,6 +36,14 @@ public class DataIntegrityViolationType extends SimpluencerException {
     protected String getInput() {
         return Optional.ofNullable(this.result.input())
                 .map(s -> String.format("'%s'", s))
-                .orElse("빈");
+                .orElse("");
+    }
+
+    protected String getComment() {
+        if(this.result.input() == null) {
+            return "'%s'에 입력된 값이 없습니다.%s";
+        } else {
+            return "'%s'에 입력된 값인 '%s'이 이미 존재합니다.";
+        }
     }
 }

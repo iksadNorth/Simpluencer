@@ -158,5 +158,7 @@ gradle-app.setting
 *.hprof
 
 # 사용자 정의
+.env
+set_env_var.sh
 
 # End of https://www.toptal.com/developers/gitignore/api/linux,intellij+all,gradle,java
