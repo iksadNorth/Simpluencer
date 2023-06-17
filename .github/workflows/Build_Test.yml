@@ -11,6 +11,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Copy Env Var Repo
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ secrets.GIT_OWNER }}/${{ secrets.GIT_REPO_NAME }}
+          ref: main
+          token: ${{ secrets.GIT_PASSWORD }}
+
+      - name: Set .env As Env Var
+        run: |
+          source ./set_env_var.sh .env
+
       - name: Copy Sources
         uses: actions/checkout@v3
 
