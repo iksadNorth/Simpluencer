@@ -3,10 +3,7 @@ package com.iksad.simpluencer.repository;
 import com.iksad.simpluencer.config.PasswordEncoderConfig;
 import com.iksad.simpluencer.entity.Agent;
 import com.iksad.simpluencer.entity.RoleOfAgent;
-import com.iksad.simpluencer.exception.ParserExceptionFactoryImpl.NotNullViolationParser;
-import com.iksad.simpluencer.exception.ParserExceptionFactoryImpl.UniqueViolationParser;
 import com.iksad.simpluencer.fixture.AgentFixture;
-import com.iksad.simpluencer.model.ParsedExceptionResult;
 import com.iksad.simpluencer.model.request.UserRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
@@ -68,12 +65,6 @@ class AgentRepositoryTest {
                 insert into agent (created_at,email,nickname,password,id) values (?,?,?,?,default) [23505-214]] [insert into agent (created_at,email,nickname,password,id) values (?,?,?,?,default)]; SQL [insert into agent (created_at,email,nickname,password,id) values (?,?,?,?,default)]; constraint ["PUBLIC.CONSTRAINT_INDEX_3 ON PUBLIC.AGENT(EMAIL NULLS FIRST) VALUES ( /* 2 */ 'mock email' )"; SQL statement:
                 insert into agent (created_at,email,nickname,password,id) values (?,?,?,?,default) [23505-214]]
                 """.trim());
-
-        UniqueViolationParser parser = new UniqueViolationParser(e);
-        ParsedExceptionResult result = parser.parse();
-        assertThat(result.reason()).isEqualTo("Unique index or primary key violation");
-        assertThat(result.column()).isEqualTo("email");
-        assertThat(result.input()).isEqualTo("mock email");
     }
 
     @Test @DisplayName("[save][비정상] 빈 칸으로 들어온 이메일")
@@ -96,11 +87,6 @@ class AgentRepositoryTest {
         assertThat(message).isEqualTo("""
                 not-null property references a null or transient value : com.iksad.simpluencer.entity.Agent.email
                 """.trim());
-
-        NotNullViolationParser parser = new NotNullViolationParser(e);
-        ParsedExceptionResult result = parser.parse();
-        assertThat(result.reason()).isEqualTo("not-null property references a null or transient value");
-        assertThat(result.column()).isEqualTo("email");
     }
 
     @Test @DisplayName("[save][정상] Cascade.Persist 작동 여부")

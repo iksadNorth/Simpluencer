@@ -2,7 +2,7 @@ package com.iksad.simpluencer.service;
 
 import com.iksad.simpluencer.config.EmailContent.PasswordResetEmailContent;
 import com.iksad.simpluencer.entity.Agent;
-import com.iksad.simpluencer.exception.ErrorType;
+import com.iksad.simpluencer.exception.ErrorType.EmailNotFoundType;
 import com.iksad.simpluencer.model.AgentDto;
 import com.iksad.simpluencer.model.request.ResetPasswordRequest;
 import com.iksad.simpluencer.model.request.UserRequest;
@@ -43,7 +43,7 @@ public class AgentServiceImpl implements AgentService {
         // 조회하고
         String email = request.email();
         Agent entity = agentRepository.findByEmail(email)
-                .orElseThrow(() -> ErrorType.EMAIL_NOT_FOUND.toException(email));
+                .orElseThrow(() -> new EmailNotFoundType(email));
 
         // 무작위 생성된 비밀번호 16자리를 생성하고
         String newPassWord = RandomUtils.getPassWordHex();
