@@ -1,7 +1,7 @@
 package com.iksad.simpluencer.exception.Handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.iksad.simpluencer.exception.ErrorType;
+import com.iksad.simpluencer.exception.ErrorType.LoginFailType;
 import com.iksad.simpluencer.model.response.ErrorResponse;
 import com.iksad.simpluencer.utils.HttpParsingUtils;
 import jakarta.servlet.ServletException;
@@ -32,7 +32,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
             HttpServletResponse response,
             AuthenticationException exception
     ) throws IOException, ServletException {
-        ErrorType type = ErrorType.LOGIN_FAIL;
+        LoginFailType type = new LoginFailType();
 
         Arg args = Arg.builder()
                 .request(request)

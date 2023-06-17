@@ -1,12 +1,13 @@
-package com.iksad.simpluencer.exception.ParserExceptionFactoryImpl;
+package com.iksad.simpluencer.exception.DataIntegrityViolationExceptionParser;
 
-import com.iksad.simpluencer.exception.ParserExceptionFactory;
-import com.iksad.simpluencer.model.ParsedExceptionResult;
+import com.iksad.simpluencer.exception.ErrorType.DataIntegrityViolationType.ParsedExceptionResult;
+import org.springframework.dao.DataIntegrityViolationException;
 
-public class UniqueViolationParser extends ParserExceptionFactory {
-    public UniqueViolationParser(Exception e) {
+public class UniqueViolationParser extends DataIntegrityViolationExceptionParser {
+    public UniqueViolationParser(DataIntegrityViolationException e) {
         super(e);
     }
+
     @Override
     public boolean instanceOf() {
         return e.getMessage()
