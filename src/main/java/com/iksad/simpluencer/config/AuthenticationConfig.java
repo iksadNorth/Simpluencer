@@ -1,10 +1,13 @@
 package com.iksad.simpluencer.config;
 
+import com.iksad.simpluencer.service.OAuth2PanelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
@@ -15,6 +18,9 @@ import static org.springframework.security.web.util.matcher.AntPathRequestMatche
 @RequiredArgsConstructor
 public class AuthenticationConfig {
     private final AuthenticationFailureHandler authenticationFailureHandler;
+    private final OAuth2PanelService oAuth2PanelService;
+    private final ClientRegistrationRepository clientRegistrationRepository;
+    private final OAuth2AuthorizedClientService oAuth2AuthorizedClientService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -61,6 +67,20 @@ public class AuthenticationConfig {
                 .csrf(
                         b -> b
                                 .ignoringRequestMatchers(antMatcher("/h2/**"))
+                )
+
+                .oauth2Login(
+                        b -> b
+                                .defaultSuccessUrl("/auth/login")
+                                .failureUrl("/auth/login/oauth/fail")
+
+                                .clientRegistrationRepository(clientRegistrationRepository)
+                                .authorizedClientService(oAuth2AuthorizedClientService)
+
+                                .userInfoEndpoint(
+                                        e -> e
+                                                .userService(oAuth2PanelService)
+                                )
                 )
 
                 .build();
