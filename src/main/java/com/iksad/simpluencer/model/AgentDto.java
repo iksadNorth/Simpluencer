@@ -20,7 +20,8 @@ public record AgentDto(
         String email,
         String password,
         String nickname,
-        Collection<RoleType> roles
+        Collection<RoleType> roles,
+        Collection<PanelDto> panelDtos
 ) implements UserDetails {
     public static AgentDto fromEntity(Agent entity) {
         return AgentDto.builder()
@@ -33,6 +34,16 @@ public record AgentDto(
 
                 .roles(TypeTransformUtils.map(entity.getRoles(), RoleOfAgent::getRole))
                 .build();
+    }
+
+    public Agent toEntity() {
+        Agent entity = new Agent();
+        entity.setId(this.id);
+        entity.setCreatedAt(this.createdAt);
+        entity.setEmail(this.email);
+        entity.setPassword(this.password);
+        entity.setNickname(this.nickname);
+        return entity;
     }
 
     @Override

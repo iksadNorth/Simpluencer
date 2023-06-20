@@ -118,7 +118,7 @@ function request(url, options) {
       console.log(`<-- 응답 Header: \n`, response.headers);
       return response;
     })
-    .then(response =>{
+    .then(response => {
       //// 리다이렉션이면 수동으로 url를 교체함.
       if (response.redirected) {
         window.location.href = response.url;
