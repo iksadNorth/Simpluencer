@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>플랫폼 관리 대시보드</title>
+
+    <div th:replace="~{../../templates/component/common :: head}"></div>
+</head>
+
+<body>
+    <div th:insert="~{../../templates/component/common :: header}"></div>
+
+    <div class="container pair rounded-2 shadow border border-dark-subtle" >
+        <div class="row" >
+            <div class="col">
+                <h1 class="title">
+                    Add your account!!
+                </h1>
+                <div class="d-flex gap-2 justify-content-start py-2">
+                    <th:block th:each="platform : ${platforms}">
+                        <div th:replace="~{../../templates/component/platform :: registration_platform}"></div>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+
+        <div style="border-top: 1px solid #000;"></div>
+
+        <div class="row" >
+            <div class="col bucket">
+                <th:block th:each="panel : ${panels}">
+                    <div th:replace="~{../../templates/component/platform :: card_platform}"></div>
+                </th:block>
+            </div>
+        </div>
+    </div>
+
+    <div th:insert="~{../../templates/component/common :: footer}"></div>
+</body>
+
+</html>
