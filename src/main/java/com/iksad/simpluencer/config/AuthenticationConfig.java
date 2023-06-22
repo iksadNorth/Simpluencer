@@ -4,6 +4,7 @@ import com.iksad.simpluencer.service.OAuth2PanelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
@@ -29,6 +30,12 @@ public class AuthenticationConfig {
                         b -> b
                                 .requestMatchers(antMatcher("/h2/**")).permitAll()
                                 .requestMatchers(antMatcher("/css/**"), antMatcher("/js/**")).permitAll()
+
+                                .requestMatchers(antMatcher(HttpMethod.GET, "/platform/create")).authenticated()
+
+                                .requestMatchers(antMatcher(HttpMethod.PATCH, "/api/v1/panel/**")).authenticated()
+                                .requestMatchers(antMatcher(HttpMethod.DELETE, "/api/v1/panel/**")).authenticated()
+
                                 .anyRequest().permitAll()
                 )
 
@@ -71,8 +78,7 @@ public class AuthenticationConfig {
 
                 .oauth2Login(
                         b -> b
-                                .defaultSuccessUrl("/auth/login")
-                                .failureUrl("/auth/login/oauth/fail")
+                                .defaultSuccessUrl("/platform/create")
 
                                 .clientRegistrationRepository(clientRegistrationRepository)
                                 .authorizedClientService(oAuth2AuthorizedClientService)

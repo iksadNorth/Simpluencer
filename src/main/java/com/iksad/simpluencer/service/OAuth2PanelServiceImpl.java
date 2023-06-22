@@ -15,16 +15,16 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class OAuth2AgentServiceImpl implements OAuth2PanelService {
+public class OAuth2PanelServiceImpl implements OAuth2PanelService {
     private final PanelRepository panelRepository;
 
     @Override
     public PanelDto loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         String provider = userRequest.getClientRegistration().getRegistrationId();
         PlatformType platformType = PlatformType.providerOf(provider);
-        OAuth2PanelDtoFactory OAuth2PanelDtoFactory = platformType.getOAuth2PanelDtoFactory();
+        OAuth2PanelDtoFactory oAuth2PanelDtoFactory = platformType.getOAuth2PanelDtoFactory();
 
-        PanelDto panelDtoFromOAuth2 = OAuth2PanelDtoFactory.newInstance(userRequest);
+        PanelDto panelDtoFromOAuth2 = oAuth2PanelDtoFactory.newInstance(userRequest);
 
         Panel panel = panelRepository.findByProviderAndPrincipalName(
                 panelDtoFromOAuth2.provider(), panelDtoFromOAuth2.principalName()

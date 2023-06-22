@@ -170,3 +170,7 @@ function del(url, options={}) {
   options.method = 'DELETE';
   return request(url, options);
 }
+
+function reloadPage() {
+  location.reload();
+}

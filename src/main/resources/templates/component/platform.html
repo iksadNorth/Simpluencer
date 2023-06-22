@@ -1,0 +1,97 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="registration_platform" >
+    <a th:href="${platform.redirectURL}">
+    <span
+            th:id="|registration_platform_${platform.provider}|"
+            class="badge d-flex align-items-center p-1 pe-2 text-dark-emphasis bg-secondary-subtle border border-secondary-subtle rounded-pill"
+    >
+        <img
+                class="rounded-circle me-1"
+                width="48" height="48"
+                th:src="@{/img/{file}(file=${platform.icon})}"
+        >
+        <span th:text="${platform.frontName}">
+            Platform
+        </span>
+    </span>
+    </a>
+</div>
+
+<div th:fragment="card_platform" class="block" th:id="|card_platform_${panel.id}|">
+    <div class="card tada">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <svg
+                        class="bd-placeholder-img"
+                        width="100%" height="150"
+                        xmlns="http://www.w3.org/2000/svg"
+                >
+                    <rect width="100%" height="100%" rx="10" ry="10" fill="#868e96"></rect>
+                    <image th:xlink:href="@{/img/{icon}(icon=${panel.icon})}" width="100%" height="100%" />
+                </svg>
+            </div>
+
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${panel.frontName}">
+                        Platform
+                    </h5>
+                    <p th:id="|card_platform_${panel.id}_label|" th:text="${panel.description}" class="card-text pos">
+                        Description
+                    </p>
+                    <input th:id="|card_platform_${panel.id}_text|" type="text" class="card-text neg hidden" th:value="${panel.description ?: '상세정보를 입력해주세요!'}">
+                    <button type="button" th:onclick="|clickWillUpdatePanel_${panel.id}()|" class="btn btn-outline-success pos">수정</button>
+                    <button type="button" th:onclick="|clickGetUpdatePanel_${panel.id}()|" class="btn btn-success neg hidden">완료</button>
+                    <button type="button" th:onclick="|clickDeletePanel_${panel.id}()|" class="btn btn-outline-danger">삭제</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script th:inline="javascript">
+        function clickWillUpdatePanel_[[${panel.id}]]() {
+            const rootEl = document.getElementById([[|card_platform_${panel.id}|]])
+
+            const addEl = rootEl.querySelectorAll(`.pos`);
+            addEl.forEach((element) => {
+              element.classList.add('hidden');
+            });
+            const removeEl = rootEl.querySelectorAll(`.neg.hidden`);
+            removeEl.forEach((element) => {
+              element.classList.remove('hidden');
+            });
+        }
+
+        function clickGetUpdatePanel_[[${panel.id}]]() {
+            const rootEl = document.getElementById([[|card_platform_${panel.id}|]])
+
+            const addEl = rootEl.querySelectorAll(`.neg`);
+            addEl.forEach((element) => {
+              element.classList.add('hidden');
+            });
+            const removeEl = rootEl.querySelectorAll(`.pos.hidden`);
+            removeEl.forEach((element) => {
+              element.classList.remove('hidden');
+            });
+
+            const textElement = document.getElementById([[|card_platform_${panel.id}_text|]]);
+            const labelElement = document.getElementById([[|card_platform_${panel.id}_label|]]);
+            labelElement.innerText = textElement.value;
+
+            patch(`/api/v1/panel/[[${panel.id}]]`, {
+                body: JSON.stringify({
+                    description: labelElement.innerText,
+                }),
+            }).then(reloadPage).catch(doWhenErr);
+        }
+
+        function clickDeletePanel_[[${panel.id}]]() {
+            del(`/api/v1/panel/[[${panel.id}]]`).then(reloadPage).catch(doWhenErr);
+        }
+    </script>
+</div>
+
+</body>
+
+</html>
