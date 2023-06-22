@@ -1,9 +1,9 @@
 package com.iksad.simpluencer.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.iksad.simpluencer.exception.ExceptionParserFactory.ExceptionParserFactory;
 import com.iksad.simpluencer.model.request.PanelUpdateRequest;
 import com.iksad.simpluencer.service.PanelService;
+import com.iksad.simpluencer.tools.MockBeansForController;
 import com.iksad.simpluencer.tools.MockMvcTools;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,13 +20,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WithMockUser
 @WebMvcTest(PanelApiController.class)
+@MockBeansForController
+@MockBean(PanelService.class)
 @DisplayName("[PanelApiController]")
 class PanelApiControllerTest {
     @Autowired private MockMvc mvc;
     @Autowired private ObjectMapper objectMapper;
     @InjectMocks private PanelApiController panelApiController;
-    @MockBean private PanelService panelService;
-    @MockBean private ExceptionParserFactory exceptionParserFactory;
 
     private MockMvcTools tools;
 

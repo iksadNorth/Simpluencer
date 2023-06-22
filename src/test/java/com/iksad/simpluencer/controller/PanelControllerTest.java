@@ -1,11 +1,11 @@
 package com.iksad.simpluencer.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.iksad.simpluencer.exception.ExceptionParserFactory.ExceptionParserFactory;
 import com.iksad.simpluencer.model.PlatformTypeDto;
 import com.iksad.simpluencer.model.response.PanelReadResponse;
 import com.iksad.simpluencer.service.PanelService;
 import com.iksad.simpluencer.service.PlatformService;
+import com.iksad.simpluencer.tools.MockBeansForController;
 import com.iksad.simpluencer.tools.MockMvcTools;
 import com.iksad.simpluencer.tools.MockSecurityContextFactory.WithMockPrincipal;
 import com.iksad.simpluencer.type.PlatformType;
@@ -28,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WithMockPrincipal
 @WebMvcTest(PanelController.class)
+@MockBeansForController
 @DisplayName("[PanelController]")
 class PanelControllerTest {
     @Autowired
@@ -36,7 +37,6 @@ class PanelControllerTest {
     @InjectMocks private PanelController panelController;
     @MockBean private PlatformService platformService;
     @MockBean private PanelService panelService;
-    @MockBean private ExceptionParserFactory exceptionParserFactory;
 
     private MockMvcTools tools;
 

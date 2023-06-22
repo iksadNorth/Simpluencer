@@ -5,7 +5,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+@EntityListeners(AuditingEntityListener.class)
 @Entity
 @Table(name = "role_of_agent", indexes = {
         @Index(columnList = "agent_id"),
@@ -13,6 +16,7 @@ import lombok.Setter;
 })
 @NoArgsConstructor @Getter @Setter
 public class RoleOfAgent extends BaseEntity {
+    @CreatedBy
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "agent_id", nullable = false)
     private Agent agent;
