@@ -1,7 +1,6 @@
 package com.iksad.simpluencer.type;
 
-import com.iksad.simpluencer.service.PanelDtoFactory.GooglePanelDtoFactory;
-import com.iksad.simpluencer.service.PanelDtoFactory.OAuth2PanelDtoFactory;
+import com.iksad.simpluencer.config.OAuth2ProviderType;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -9,12 +8,12 @@ import java.util.stream.Stream;
 
 @RequiredArgsConstructor @Getter
 public enum PlatformType {
-    GOOGLE("google", new GooglePanelDtoFactory(), "Google", "youtube.png");
+    GOOGLE("GOOGLE", "Google", "youtube.png", OAuth2ProviderType.GOOGLE);
 
     private final String provider;
-    private final OAuth2PanelDtoFactory OAuth2PanelDtoFactory;
     private final String frontName;
     private final String icon;
+    private final OAuth2ProviderType providerType;
 
     public static PlatformType providerOf(String arg) {
         return Stream.of(PlatformType.values())

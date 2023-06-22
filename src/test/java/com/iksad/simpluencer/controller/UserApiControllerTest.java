@@ -1,10 +1,10 @@
 package com.iksad.simpluencer.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.iksad.simpluencer.exception.ExceptionParserFactory.ExceptionParserFactory;
 import com.iksad.simpluencer.fixture.AgentFixture;
 import com.iksad.simpluencer.model.request.UserRequest;
 import com.iksad.simpluencer.service.AgentService;
+import com.iksad.simpluencer.tools.MockBeansForController;
 import com.iksad.simpluencer.tools.MockMvcTools;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,12 +24,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Slf4j
 @WithMockUser
 @WebMvcTest(UserApiController.class)
+@MockBeansForController
 @DisplayName("[UserApiController]")
 class UserApiControllerTest {
     @Autowired ObjectMapper objectMapper;
     @Autowired private MockMvc mvc;
     @MockBean private AgentService agentService;
-    @MockBean private ExceptionParserFactory exceptionParserFactory;
 
     MockMvcTools tools;
 

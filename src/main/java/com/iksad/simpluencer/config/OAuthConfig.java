@@ -1,53 +1,42 @@
 package com.iksad.simpluencer.config;
 
+import com.iksad.simpluencer.Properties.ServerProperties;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
-import org.springframework.security.oauth2.core.AuthorizationGrantType;
 
 import java.util.List;
 import java.util.Map;
 
 @Configuration
+@RequiredArgsConstructor
 public class OAuthConfig {
-    private final Map<String, OAuth2ClientProperties.Registration> registrations;
-    private final Map<String, OAuth2ClientProperties.Provider> providers;
+    private final OAuth2ClientProperties oAuth2ClientProperties;
+    private final ServerProperties serverProperties;
 
-    @Autowired
-    public OAuthConfig(OAuth2ClientProperties oAuth2ClientProperties) {
-        this.registrations = oAuth2ClientProperties.getRegistration();
-        this.providers = oAuth2ClientProperties.getProvider();
+    private List<ClientRegistration> clientRegistrations(){
+        return oAuth2ClientProperties.getRegistration().entrySet().stream()
+                .map(this::castToClientRegistration)
+                .toList();
     }
 
     @Bean
     public ClientRegistrationRepository clientRegistrationRepository() {
-        List<ClientRegistration> clientRegistrations = registrations.keySet().stream()
-                .map(this::castToClientRegistration)
-                .toList();
-        return new InMemoryClientRegistrationRepository(clientRegistrations);
+        return new InMemoryClientRegistrationRepository(clientRegistrations());
     }
 
-    private ClientRegistration castToClientRegistration(String registrationId) {
-        OAuth2ClientProperties.Registration registration = registrations.get(registrationId);
-        OAuth2ClientProperties.Provider provider = providers.get(registrationId);
+    private ClientRegistration castToClientRegistration(Map.Entry<String, OAuth2ClientProperties.Registration> entry) {
+        String registrationId = entry.getKey();
+        OAuth2ProviderType provider = OAuth2ProviderType.valueOf(registrationId);
+        OAuth2ClientProperties.Registration registration = entry.getValue();
 
-        return ClientRegistration.withRegistrationId(registrationId)
-
-                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+        return provider.getBuilder(registrationId, serverProperties)
                 .clientId(registration.getClientId())
                 .clientSecret(registration.getClientSecret())
-                .redirectUri(registration.getRedirectUri())
-                .scope(registration.getScope())
-
-                .authorizationUri(provider.getAuthorizationUri())
-                .tokenUri(provider.getTokenUri())
-                .userNameAttributeName(provider.getUserNameAttribute())
-
                 .build();
     }
 }
