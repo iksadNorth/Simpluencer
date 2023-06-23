@@ -23,7 +23,7 @@ public class OAuth2PanelServiceImpl implements OAuth2PanelService {
     @Override
     public PanelDto loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = oAuth2UserService.loadUser(userRequest);
-        Panel entity = castRequestToEntity(userRequest, oAuth2User.getName());
+        Panel entity = castRequestToEntity(userRequest, oAuth2User);
         Panel saved = loadOrSave(entity);
 
         return PanelDto.fromEntity(saved)
@@ -39,10 +39,11 @@ public class OAuth2PanelServiceImpl implements OAuth2PanelService {
         ).orElseGet(() -> panelRepository.save(entity));
     }
 
-    public static Panel castRequestToEntity(OAuth2UserRequest request, String principalName) {
+    public static Panel castRequestToEntity(OAuth2UserRequest request, OAuth2User oAuth2User) {
         Panel entity = new Panel();
         entity.setProvider(getProvider(request));
-        entity.setPrincipalName(principalName);
+        entity.setPrincipalName(oAuth2User.getName());
+        entity.setEmail(oAuth2User.getAttribute("email"));
         return entity;
     }
 
