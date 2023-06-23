@@ -38,10 +38,21 @@
                     <h5 class="card-title" th:text="${panel.frontName}">
                         Platform
                     </h5>
-                    <p th:id="|card_platform_${panel.id}_label|" th:text="${panel.description}" class="card-text pos">
-                        Description
+
+                    <p class="card-title text-secondary" th:text="${panel.email}">
+                        Email
                     </p>
-                    <input th:id="|card_platform_${panel.id}_text|" type="text" class="card-text neg hidden" th:value="${panel.description ?: '상세정보를 입력해주세요!'}">
+                    <th:block th:if="${#strings.isEmpty(panel.description)}">
+                        <p th:id="|card_platform_${panel.id}_label|" class="card-text pos">
+                            Description
+                        </p>
+                    </th:block>
+                    <th:block th:unless="${#strings.isEmpty(panel.description)}">
+                        <p th:id="|card_platform_${panel.id}_label|" th:text="${panel.description}" class="card-text pos">
+                            Description
+                        </p>
+                    </th:block>
+                    <input th:id="|card_platform_${panel.id}_text|" type="text" class="card-text neg hidden" th:value="${panel.description}">
                     <button type="button" th:onclick="|clickWillUpdatePanel_${panel.id}()|" class="btn btn-outline-success pos">수정</button>
                     <button type="button" th:onclick="|clickGetUpdatePanel_${panel.id}()|" class="btn btn-success neg hidden">완료</button>
                     <button type="button" th:onclick="|clickDeletePanel_${panel.id}()|" class="btn btn-outline-danger">삭제</button>
