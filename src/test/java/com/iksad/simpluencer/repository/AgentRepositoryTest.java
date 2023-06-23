@@ -62,8 +62,8 @@ class AgentRepositoryTest {
         log.info("e.getMessage()\n{}", message);
         assertThat(message).isEqualTo("""
                 could not execute statement [Unique index or primary key violation: "PUBLIC.CONSTRAINT_INDEX_3 ON PUBLIC.AGENT(EMAIL NULLS FIRST) VALUES ( /* 2 */ 'mock email' )"; SQL statement:
-                insert into agent (created_at,email,nickname,password,id) values (?,?,?,?,default) [23505-214]] [insert into agent (created_at,email,nickname,password,id) values (?,?,?,?,default)]; SQL [insert into agent (created_at,email,nickname,password,id) values (?,?,?,?,default)]; constraint ["PUBLIC.CONSTRAINT_INDEX_3 ON PUBLIC.AGENT(EMAIL NULLS FIRST) VALUES ( /* 2 */ 'mock email' )"; SQL statement:
-                insert into agent (created_at,email,nickname,password,id) values (?,?,?,?,default) [23505-214]]
+                insert into agent (created_at,email,introduction,nickname,password,profile_image,id) values (?,?,?,?,?,?,default) [23505-214]] [insert into agent (created_at,email,introduction,nickname,password,profile_image,id) values (?,?,?,?,?,?,default)]; SQL [insert into agent (created_at,email,introduction,nickname,password,profile_image,id) values (?,?,?,?,?,?,default)]; constraint ["PUBLIC.CONSTRAINT_INDEX_3 ON PUBLIC.AGENT(EMAIL NULLS FIRST) VALUES ( /* 2 */ 'mock email' )"; SQL statement:
+                insert into agent (created_at,email,introduction,nickname,password,profile_image,id) values (?,?,?,?,?,?,default) [23505-214]]
                 """.trim());
     }
 
@@ -104,6 +104,19 @@ class AgentRepositoryTest {
         RoleOfAgent entity = iterator.next();
         assertThat(entity.getId()).isNotNull();
         log.info(String.valueOf(entity.getId()));
+
+    }
+
+    @Test @DisplayName("[findWithPanelsById][정상]")
+    void findWithPanelsById() {
+        // Given
+        long id = 1L;
+
+        // When
+        Optional<Agent> optional = agentRepository.findWithPanelsById(id);
+
+        // then
+        assertThat(optional.isPresent()).isTrue();
 
     }
 }

@@ -25,6 +25,10 @@ public class Agent extends BaseEntity {
     @Column(unique = true, nullable = false)
     private String nickname;
 
+    private String profileImage;
+
+    private String introduction;
+
     @OneToMany(mappedBy = "agent", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private Collection<RoleOfAgent> roles;
 

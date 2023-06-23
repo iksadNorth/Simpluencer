@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>디지털 명함</title>
+
+    <div th:replace="~{../../templates/component/common :: head}"></div>
+</head>
+
+<body>
+    <div th:insert="~{../../templates/component/common :: header}"></div>
+
+    <div class="container pair rounded-2 shadow border border-dark-subtle" >
+        <div class="row h-100" >
+            <div class="col-4">
+                <div th:replace="~{../../templates/component/profile :: avatar}"></div>
+            </div>
+            <div class="col">
+                <div th:replace="~{../../templates/component/profile :: introduction}"></div>
+            </div>
+        </div>
+
+        <div style="border-top: 1px solid #000;"></div>
+
+        <div class="row" >
+            <div class="col bucket">
+                <th:block th:each="panel : ${profile.panels}">
+                    <div th:replace="~{../../templates/component/profile :: panel}"></div>
+                </th:block>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:insert="~{../../templates/component/common :: footer}"></div>
+</body>
+
+</html>
