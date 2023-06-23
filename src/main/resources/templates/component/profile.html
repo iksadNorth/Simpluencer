@@ -47,8 +47,12 @@
 
 <div th:fragment="introduction" class="card shadow rounded h-100">
     <div class="card-body h-100 m-5">
-        <h5 class="card-title">사용자 NickName</h5>
-        <p class="card-text">사용자 Intro</p>
+        <h5 class="card-title"
+            th:text="${profile.nickname ?: '익명의 유저'}"
+        ></h5>
+        <p class="card-text"
+           th:text="${profile.introduction ?: '안녕하세요! 반갑습니다!!'}"
+        ></p>
     </div>
 </div>
 
