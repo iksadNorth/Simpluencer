@@ -1,0 +1,94 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="avatar" >
+    <svg
+            class="bd-placeholder-img"
+            height="100%"
+            viewBox="0 0 100 100"
+            preserveAspectRatio="xMidYMid meet"
+            xmlns="http://www.w3.org/2000/svg"
+    >
+        <defs>
+            <clipPath id="circleClip">
+                <circle cx="50%" cy="50%" r="40%" />
+            </clipPath>
+        </defs>
+        <defs>
+            <linearGradient id="linearGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="yellow" />
+                <stop offset="50%" stop-color="magenta" />
+                <stop offset="100%" stop-color="orange" />
+            </linearGradient>
+        </defs>
+        <rect
+                width="100%" height="100%"
+                fill="#868e96"
+                clip-path="url(#circleClip)"
+        ></rect>
+        <circle
+                cx="50%" cy="50%" r="45%"
+                stroke="url(#linearGradient)" stroke-width="2"
+                fill="transparent"
+        />
+        <text
+                x="50%" y="50%"
+                text-anchor="middle" dominant-baseline="middle"
+        >No Image</text>
+        <th:block th:unless="${#strings.isEmpty(profile.profileImage)}">
+            <image
+                    th:xlink:href="@{/img/{icon}(icon=${profile.profileImage})}"
+                    width="100%" height="100%"
+                    clip-path="url(#circleClip)"
+            />
+        </th:block>
+    </svg>
+</div>
+
+<div th:fragment="introduction" class="card shadow rounded h-100">
+    <div class="card-body h-100 m-5">
+        <h5 class="card-title"
+            th:text="${profile.nickname ?: '익명의 유저'}"
+        ></h5>
+        <p class="card-text"
+           th:text="${profile.introduction ?: '안녕하세요! 반갑습니다!!'}"
+        ></p>
+    </div>
+</div>
+
+<div th:fragment="panel" class="block" th:id="|panel_${panel.id}|">
+    <div class="card tada">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <svg
+                        class="bd-placeholder-img"
+                        width="100%" height="150"
+                        xmlns="http://www.w3.org/2000/svg"
+                >
+                    <rect width="100%" height="100%" rx="10" ry="10" fill="#868e96"></rect>
+                    <image th:xlink:href="@{/img/{icon}(icon=${panel.icon})}" width="100%" height="100%" />
+                </svg>
+            </div>
+
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${panel.frontName}">
+                        Platform
+                    </h5>
+
+                    <p class="card-title text-secondary" th:text="${panel.email}">
+                        Email
+                    </p>
+
+                    <p th:id="|panel_${panel.id}_label|" th:text="${panel.description}" class="card-text pos">
+                        Description
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>

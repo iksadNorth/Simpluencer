@@ -31,6 +31,8 @@ public class AuthenticationConfig {
                                 .requestMatchers(antMatcher("/h2/**")).permitAll()
                                 .requestMatchers(antMatcher("/css/**"), antMatcher("/js/**")).permitAll()
 
+                                .requestMatchers(antMatcher(HttpMethod.GET, "/profile/read/**")).permitAll()
+
                                 .requestMatchers(antMatcher(HttpMethod.GET, "/platform/create")).authenticated()
 
                                 .requestMatchers(antMatcher(HttpMethod.PATCH, "/api/v1/panel/**")).authenticated()

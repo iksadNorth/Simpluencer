@@ -2,10 +2,12 @@ package com.iksad.simpluencer.service;
 
 import com.iksad.simpluencer.config.EmailContent.PasswordResetEmailContent;
 import com.iksad.simpluencer.entity.Agent;
+import com.iksad.simpluencer.exception.ErrorType.AgentNotFoundType;
 import com.iksad.simpluencer.exception.ErrorType.EmailNotFoundType;
 import com.iksad.simpluencer.model.AgentDto;
 import com.iksad.simpluencer.model.request.ResetPasswordRequest;
 import com.iksad.simpluencer.model.request.UserRequest;
+import com.iksad.simpluencer.model.response.ProfileResponse;
 import com.iksad.simpluencer.repository.AgentRepository;
 import com.iksad.simpluencer.repository.EmailRepository;
 import com.iksad.simpluencer.utils.RandomUtils;
@@ -56,5 +58,12 @@ public class AgentServiceImpl implements AgentService {
         String title = passwordResetEmailContent.getTitle(entity);
         String content = passwordResetEmailContent.getContent(entity, newPassWord);
         emailRepository.send(email, title, content);
+    }
+
+    @Override
+    public ProfileResponse readProfileById(Long agentId) {
+        return agentRepository.findWithPanelsById(agentId)
+                .map(ProfileResponse::fromEntity)
+                .orElseThrow(() -> new AgentNotFoundType(agentId));
     }
 }

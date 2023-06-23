@@ -10,4 +10,5 @@ INSERT INTO panel (agent_id, provider, principal_name, description, location) VA
 (200, 'google', '4543wer54ef', 'mock description4', 0),
 (200, 'facebook', '4543wer54ef', 'mock description5', 1),
 (200, 'google', 'hhted44', 'mock description6', 2),
-(200, 'facebook', 'hhted44', 'mock description7', 3);
+(200, 'facebook', 'hhted44', 'mock description7', 3),
+(200, 'github', 'hhted44', 'mock description8', 1);

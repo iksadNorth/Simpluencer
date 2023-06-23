@@ -20,6 +20,8 @@ public record AgentDto(
         String email,
         String password,
         String nickname,
+        String profileImage,
+        String introduction,
         Collection<RoleType> roles,
         Collection<PanelDto> panelDtos
 ) implements UserDetails {
@@ -32,7 +34,9 @@ public record AgentDto(
                 .password(entity.getPassword())
                 .nickname(entity.getNickname())
 
-                .roles(TypeTransformUtils.map(entity.getRoles(), RoleOfAgent::getRole))
+                .profileImage(entity.getProfileImage())
+                .introduction(entity.getIntroduction())
+
                 .build();
     }
 
