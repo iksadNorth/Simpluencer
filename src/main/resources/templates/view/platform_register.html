@@ -11,11 +11,17 @@
     <div th:insert="~{../../templates/component/common :: header}"></div>
 
     <div class="container pair rounded-2 shadow border border-dark-subtle" >
+        <div class="row h-100" >
+            <div class="col-4">
+                <div th:replace="~{../../templates/component/profile :: avatar_setter}"></div>
+            </div>
+            <div class="col">
+                <div th:replace="~{../../templates/component/profile :: introduction_setter}"></div>
+            </div>
+        </div>
+
         <div class="row" >
             <div class="col">
-                <h1 class="title">
-                    Add your account!!
-                </h1>
                 <div class="d-flex gap-2 justify-content-start py-2">
                     <th:block th:each="platform : ${platforms}">
                         <div th:replace="~{../../templates/component/platform :: registration_platform}"></div>
@@ -31,6 +37,40 @@
                 <th:block th:each="panel : ${panels}">
                     <div th:replace="~{../../templates/component/platform :: card_platform}"></div>
                 </th:block>
+                <script>
+                    var dragAreas = document.getElementsByClassName("draggable");
+                    var dropAreas = document.getElementsByClassName("droppable");
+
+                    function handleDragLeave(event) {
+                      event.target.classList.remove("emphasized");
+                    }
+                    function handleDragStart(event) {
+                      event.dataTransfer.setData("text/plain", event.target.id);
+                    }
+                    function handleDragOver(event) {
+                      event.preventDefault();
+                      event.target.classList.add("emphasized");
+                    }
+                    function handleDrop(event) {
+                      event.preventDefault();
+                      var data_id_dragged = event.dataTransfer.getData("text/plain");
+
+                      var draggedElement = document.getElementById(data_id_dragged);
+                      var droppedElement = document.getElementById(event.target.getAttribute("appendto"));
+
+                      droppedElement.parentNode.insertBefore(draggedElement, droppedElement.nextSibling);
+                      handleDragLeave(event)
+                    }
+
+                    Array.from(dragAreas).forEach(function(dragArea) {
+                      dragArea.addEventListener("dragstart", handleDragStart);
+                    });
+                    Array.from(dropAreas).forEach(function(dropArea) {
+                      dropArea.addEventListener("dragover", handleDragOver);
+                      dropArea.addEventListener("dragleave", handleDragLeave);
+                      dropArea.addEventListener("drop", handleDrop);
+                    });
+                </script>
             </div>
         </div>
     </div>

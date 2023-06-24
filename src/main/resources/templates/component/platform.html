@@ -19,8 +19,8 @@
     </a>
 </div>
 
-<div th:fragment="card_platform" class="block" th:id="|card_platform_${panel.id}|">
-    <div class="card tada">
+<div th:fragment="card_platform" class="block draggable row panel" draggable="true" th:id="|card_platform_${panel.id}|" th:panel_id="${panel.id}">
+    <div class="card tada col">
         <div class="row g-0">
             <div class="col-md-4">
                 <svg
@@ -60,6 +60,9 @@
             </div>
         </div>
     </div>
+    <div th:id="|card_platform_drop_area_${panel.id}|" class="col-1 drop-area droppable bg-secondary"
+         th:appendto="|card_platform_${panel.id}|"
+    ></div>
     <script th:inline="javascript">
         function clickWillUpdatePanel_[[${panel.id}]]() {
             const rootEl = document.getElementById([[|card_platform_${panel.id}|]])

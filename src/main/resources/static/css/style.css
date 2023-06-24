@@ -79,3 +79,15 @@
 .title {
     font-family: 'Oswald', sans-serif;
 }
+
+.emphasized {
+    background-color: #DDDDDD;
+    border: 3px dashed #ccc;
+}
+
+.drop-area {
+    border-radius: 10px;
+    width: 10px;
+    padding-left: 2px;
+    transition: background-color 0.3s ease;
+}

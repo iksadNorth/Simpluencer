@@ -10,7 +10,6 @@ import java.util.Optional;
 public interface AgentRepository extends JpaRepository<Agent, Long> {
     Optional<Agent> findByEmail(String username);
 
-    @EntityGraph(attributePaths = {"panels"})
-    @Query("SELECT a FROM Agent a WHERE a.id = :id")
+    @Query("SELECT a FROM Agent a JOIN FETCH a.panels p WHERE a.id = :id ORDER BY p.location")
     Optional<Agent> findWithPanelsById(Long id);
 }

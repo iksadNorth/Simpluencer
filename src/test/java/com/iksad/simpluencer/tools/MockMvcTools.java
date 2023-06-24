@@ -3,13 +3,14 @@ package com.iksad.simpluencer.tools;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.util.MultiValueMap;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @RequiredArgsConstructor
 public class MockMvcTools {
@@ -44,6 +45,16 @@ public class MockMvcTools {
     public ResultActions delete(String url) throws Exception {
         return mvc.perform(
                         MockMvcRequestBuilders.delete(url)
+                        .with(csrf())
+        );
+    }
+
+    public ResultActions multipartForm(String url, MockMultipartFile multipartFile, MultiValueMap<String,String> params) throws Exception {
+        return mvc.perform(
+                multipart(url)
+                        .file(multipartFile)
+                        .params(params)
+                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                         .with(csrf())
         );
     }
