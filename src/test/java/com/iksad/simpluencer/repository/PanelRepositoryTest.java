@@ -5,11 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlGroup;
 
 import java.util.List;
 import java.util.Optional;
@@ -72,6 +69,24 @@ class PanelRepositoryTest {
         for(int i=0; i<length-1; i++) {
             if(panels.get(i+1).getLocation() < panels.get(i).getLocation()) {
                 throw new AssertionError("Location 순으로 오름차순 정렬이 안되어 있음.");
+            }
+        }
+    }
+
+    @Sql(scripts = {"classpath:/data_init/create_panel.sql"})
+    @Test @DisplayName("[findByAgent_Id][정상] id 값대로 정렬이 되어 있다.")
+    void findByAgent_IdOrderById() {
+        // Given
+        Long agentId = 200L;
+
+        // When
+        List<Panel> panels = panelRepository.findByAgent_IdOrderById(agentId);
+
+        // then
+        int length = panels.size();
+        for(int i=0; i<length-1; i++) {
+            if(panels.get(i+1).getId() < panels.get(i).getId()) {
+                throw new AssertionError("id 순으로 오름차순 정렬이 안되어 있음.");
             }
         }
     }

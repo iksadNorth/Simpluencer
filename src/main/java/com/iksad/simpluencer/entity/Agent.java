@@ -32,7 +32,7 @@ public class Agent extends BaseEntity {
     @OneToMany(mappedBy = "agent", cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private Collection<RoleOfAgent> roles;
 
-    @OneToMany(mappedBy = "agent", cascade = {CascadeType.REMOVE})
+    @OneToMany(mappedBy = "agent", cascade = {CascadeType.REMOVE, CascadeType.MERGE})
     private Collection<Panel> panels;
 
     public void setRoles(Collection<RoleOfAgent> roles) {

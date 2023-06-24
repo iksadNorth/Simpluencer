@@ -1,6 +1,7 @@
 package com.iksad.simpluencer.model.response;
 
 import com.iksad.simpluencer.entity.Agent;
+import com.iksad.simpluencer.model.AgentDto;
 import lombok.Builder;
 
 import java.util.List;
@@ -22,6 +23,14 @@ public record ProfileResponse(
                 .profileImage(entity.getProfileImage())
                 .introduction(entity.getIntroduction())
                 .panels(panels)
+                .build();
+    }
+
+    public static ProfileResponse of(AgentDto dto) {
+        return ProfileResponse.builder()
+                .nickname(dto.nickname())
+                .profileImage(dto.profileImage())
+                .introduction(dto.introduction())
                 .build();
     }
 }

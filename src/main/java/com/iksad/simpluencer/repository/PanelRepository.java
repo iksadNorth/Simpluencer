@@ -14,4 +14,7 @@ public interface PanelRepository extends JpaRepository<Panel, Long> {
 
     @Query("SELECT p FROM Panel p WHERE p.agent.id = :agentId ORDER BY p.location")
     List<Panel> findByAgent_Id(Long agentId);
+
+    @Query("SELECT p FROM Panel p WHERE p.agent.id = :agentId ORDER BY p.id")
+    List<Panel> findByAgent_IdOrderById(Long agentId);
 }

@@ -3,6 +3,7 @@ package com.iksad.simpluencer.controller;
 import com.iksad.simpluencer.model.AgentDto;
 import com.iksad.simpluencer.model.PlatformTypeDto;
 import com.iksad.simpluencer.model.response.PanelReadResponse;
+import com.iksad.simpluencer.model.response.ProfileResponse;
 import com.iksad.simpluencer.service.PanelService;
 import com.iksad.simpluencer.service.PlatformService;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,9 @@ public class PanelController {
 
     @GetMapping("/create")
     public String create(@AuthenticationPrincipal AgentDto principal, Model model) {
+        ProfileResponse profileResponse = ProfileResponse.of(principal);
+        model.addAttribute("profile", profileResponse);
+
         List<PlatformTypeDto> platforms = platformService.getPlatforms();
         model.addAttribute("platforms", platforms);
 

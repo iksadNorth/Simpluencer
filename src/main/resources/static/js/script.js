@@ -89,7 +89,7 @@ function request(url, options) {
   options.headers[csrfKey] = csrfToken;
 
   // 데이터 형식 추가.
-  if(!hasSomethingInString(options.headers['Content-Type'])) {
+  if(!hasSomethingInString(options.headers['Content-Type']) && !options.noContentType) {
     options.headers['Content-Type'] = 'application/json';
   }
 
