@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>공지 작성</title>
+
+    <div th:replace="~{../../templates/component/common :: head}"></div>
+
+    <style>
+        .row-gap > .row {
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        .col-gap > .row > .col {
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+
+        .first-row > .col > * {
+            height: 50vh;
+        }
+    </style>
+</head>
+
+<body>
+<div th:insert="~{../../templates/component/common :: header}"></div>
+
+<div class="container row-gap col-gap">
+    <div class="row first-row">
+        <div class="col frame">
+            <div th:replace="~{../../templates/component/common :: selector-image}"></div>
+        </div>
+
+        <div class="col frame">
+            <div th:replace="~{../../templates/component/notice :: board-text}"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col frame">
+            <div th:replace="~{../../templates/component/notice :: selector-platform}"></div>
+        </div>
+        <div class="col-auto p-4">
+            <div th:replace="~{../../templates/component/notice :: notice-button}"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col frame">
+            <div th:replace="~{../../templates/component/notice :: list-notice}"></div>
+        </div>
+    </div>
+</div>
+
+<div th:insert="~{../../templates/component/common :: footer}"></div>
+</body>
+
+</html>
