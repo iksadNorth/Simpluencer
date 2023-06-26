@@ -33,6 +33,13 @@ public class MockMvcTools {
         );
     }
 
+    public ResultActions getApi(String url) throws Exception {
+        return mvc.perform(
+                MockMvcRequestBuilders.get(url)
+                        .with(csrf())
+        );
+    }
+
     public <T> ResultActions patchJson(String url, T request) throws Exception {
         return mvc.perform(
                 patch(url)

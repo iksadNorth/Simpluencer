@@ -31,6 +31,10 @@ public class AuthenticationConfig {
                                 .requestMatchers(antMatcher("/h2/**")).permitAll()
                                 .requestMatchers(antMatcher("/css/**"), antMatcher("/js/**")).permitAll()
 
+                                .requestMatchers(antMatcher(HttpMethod.GET, "/notice/create")).authenticated()
+                                .requestMatchers(antMatcher(HttpMethod.GET, "/api/v1/notice/**")).authenticated()
+                                .requestMatchers(antMatcher(HttpMethod.POST, "/api/v1/notice")).authenticated()
+
                                 .requestMatchers(antMatcher(HttpMethod.GET, "/profile/read/**")).permitAll()
 
                                 .requestMatchers(antMatcher(HttpMethod.GET, "/platform/create")).authenticated()
