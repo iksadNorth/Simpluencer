@@ -35,6 +35,9 @@ public class Agent extends BaseEntity {
     @OneToMany(mappedBy = "agent", cascade = {CascadeType.REMOVE, CascadeType.MERGE})
     private Collection<Panel> panels;
 
+    @OneToMany(mappedBy = "writer", cascade = {CascadeType.REMOVE})
+    private Collection<Notice> notices;
+
     public void setRoles(Collection<RoleOfAgent> roles) {
         throw new UnsupportedOperationException();
     }

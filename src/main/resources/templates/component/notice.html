@@ -36,6 +36,11 @@
             const input = document.getElementById('board-text');
             input.value = content;
         }
+        function resetNoticeContent() {
+            const input = document.getElementById('board-text');
+            input.value = "";
+            localStorage.removeItem('notice-content');
+        }
 
         const textarea = document.querySelector('#board-text');
         textarea.addEventListener('input', function(e) {
@@ -77,12 +82,11 @@
         }
     </style>
 
-    <div><br></div>
     <th:block th:each="panel : ${panels}">
-        <div th:id="platform-btn-${panel?.id}" th:panelid="${panel?.id}"
+        <div th:id="|platform-btn-${panel.id}|" th:panelid="${panel.id}"
              class="platform selected text-center"
-             th:onclick="|toggleHandler('platform-btn-${panel?.id}|')"
-             th:text="${panel?.description}"
+             th:onclick="|toggleHandler('platform-btn-${panel.id}')|"
+             th:text="${panel.description}"
         >
             Description
         </div>
@@ -98,8 +102,8 @@
         }
 
         function resetPlatforms() {
-            const elePlatform = document.querySelectorAll('#selector-platform .platform');
-            elePlatform.map((El) => {
+            const elePlatform = document.querySelectorAll('#selector-platform .platform.selected');
+            elePlatform.forEach((El) => {
                 El.classList.remove('selected');
             });
         }
@@ -132,10 +136,20 @@
         const content = getNoticeContent();
         const platforms = getPlatforms();
 
-        post(`/api/v1/notice`).then((res) => {
-            setNoticeContent("");
+        const formdata = new FormData();
+        formdata.append('image', image[0]);
+        formdata.append('content', content);
+        formdata.append('platforms', platforms);
+
+        post(`/api/v1/notice`, {
+            body: formdata,
+            noContentType: true,
+        }).then((res) => {
+            resetNoticeContent();
             setImgSrc("#");
             resetPlatforms();
+
+            reloadPage();
         }).catch(doWhenErr);
     }
     </script>
@@ -232,15 +246,15 @@
         <th:block th:each="notice : ${notices}">
         <tr>
             <td>
-                <img class="notice-img" th:src="${notice?.image}">
+                <img class="notice-img" th:src="@{/img/{image}(image=${notice.image})}">
             </td>
             <td>
-                <div class="notice-desc" th:text="${notice?.content}">
+                <div class="notice-desc" th:text="${notice.content}">
                     desc
                 </div>
             </td>
             <td>
-                <div class="button" th:onclick="|takeNoticeHistory(${notice?.id})|">
+                <div class="button" th:onclick="|takeNoticeHistory(${notice.id})|">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
                         <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
                         <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
@@ -266,7 +280,7 @@
     function takeNoticeHistory(noticeId) {
         get(`/api/v1/notice/${noticeId}`).then((res) => {
             setNoticeContent(res.content);
-            setImgSrc(res.image);
+            setImgSrc(`/img/${res.image}`);
         }).catch(doWhenErr);
     }
 
@@ -279,8 +293,10 @@
         const el_next = document.querySelector('#btn-next-page');
         const el_previous = document.querySelector('#btn-previous-page');
 
-        el_next.disable = ![[${hasNext}]];
-        el_previous.disable = ![[${hasPrevious}]];
+        const flagHasNext = [[${hasNext}]];
+        const flagHasPrevious = [[${hasPrevious}]];
+        el_next.disable = !flagHasNext;
+        el_previous.disable = !flagHasPrevious;
     }
     setBtnDisable();
 
