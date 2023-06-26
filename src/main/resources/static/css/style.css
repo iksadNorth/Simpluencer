@@ -91,3 +91,55 @@
     padding-left: 2px;
     transition: background-color 0.3s ease;
 }
+
+textarea {
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+}
+textarea::-webkit-scrollbar {
+  width: 8px;
+}
+textarea::-webkit-scrollbar-track {
+  background: #BFBFBF;
+  border-radius: 30px;
+}
+textarea::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 30px;
+}
+textarea::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.frame {
+    --frame-width: 100%;
+    --frame-height: 90%;
+
+    --border-radius: 30px;
+
+    position: relative;
+
+    height: var(--frame-height);
+    width: var(--frame-width);
+
+    border: 5px solid black;
+    border-radius: var(--border-radius);
+
+    background-color: #FFFFFF;
+}
+.frame::before {
+    content: "";
+
+    position: absolute;
+    bottom: -15px;
+    right: -10px;
+    z-index: -10;
+
+    height: calc(var(--frame-height) * 1.15);
+    width: calc(var(--frame-width) * 0.99);
+
+    border: 5px solid black;
+    border-radius: var(--border-radius);
+
+    background-color: #40a168;
+}

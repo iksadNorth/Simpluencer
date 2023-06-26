@@ -24,6 +24,157 @@
         <!--    project js -->
         <script type="text/javascript" th:src="@{/js/script.js}"></script>
     </div>
+
+    <div th:fragment="selector-image" class="upload-box">
+        <style>
+            .upload-box {
+              width: 100%;
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+            }
+            .upload-box .drag-file {
+              position: relative;
+              width: 100%;
+              height: 360px;
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+              border: 3px dashed #dbdbdb;
+            }
+             .upload-box .drag-file.highlight {
+              border: 3px dashed red;
+            }
+            .upload-box .image {
+              width: 40px;
+            }
+            .upload-box .preview {
+              position: absolute;
+              left: 0;
+              height: 0;
+              width: 100%;
+              height: 100%;
+              object-fit: contain;
+            }
+            .upload-box .file-label {
+              margin-top: 30px;
+              background-color: #5b975b;
+              color: #fff;
+              text-align: center;
+              padding: 10px 0;
+              width: 65%;
+              border-radius: 6px;
+              cursor: pointer;
+            }
+            .upload-box .file {
+              display: none;
+            }
+            .upload-box .after-select-img {
+              display: none;
+            }
+        </style>
+        <div id="drop-file" class="drag-file">
+            <img src="https://img.icons8.com/pastel-glyph/2x/image-file.png" alt="파일 아이콘" class="image before-select-img" >
+            <p class="message before-select-img">Drag files to upload</p>
+            <img src="" alt="미리보기 이미지" class="preview after-select-img">
+        </div>
+        <label class="file-label" for="chooseFile">Choose File</label>
+        <input class="file" id="chooseFile"
+               type="file"
+               onchange="handleFiles()"
+               accept="image/png, image/jpeg, image/gif"
+        >
+        <script>
+        function isImageSelected() {
+            const input = document.getElementById('chooseFile');
+            return input.files.length > 0;
+        }
+
+        function getImageFile() {
+            const input = document.getElementById('chooseFile');
+            return input.files;
+        }
+
+        function setImageFile(files) {
+            const input = document.getElementById('chooseFile');
+            input.files = files;
+        }
+
+        function fileRead(file) {
+            const reader = new FileReader();
+            reader.addEventListener('load', function() {
+                setImgSrc(this.result);
+            });
+            reader.readAsDataURL(file);
+        }
+
+        function setImgSrc(result) {
+            const previews = document.querySelectorAll(".preview");
+            previews.forEach((El) => {
+                El.src = result;
+            });
+        }
+
+        function handleFiles() {
+
+            const beforeImgs = document.querySelectorAll(".drag-file .before-select-img");
+            const afterImgs = document.querySelectorAll(".drag-file .after-select-img");
+
+            if(isImageSelected()) {
+                fileRead(getImageFile()[0]);
+
+                beforeImgs.forEach((El) => {
+                    El.style.display = "none";
+                });
+                afterImgs.forEach((El) => {
+                    El.style.display = "block";
+                });
+            } else {
+                beforeImgs.forEach((El) => {
+                    El.style.display = "block";
+                });
+                afterImgs.forEach((El) => {
+                    El.style.display = "none";
+                });
+            }
+        }
+
+        function highlight(e) {
+            e.preventDefault();
+
+            const dropArea = document.getElementById("drop-file");
+            dropArea.classList.add("highlight");
+        }
+
+        function unhighlight(e) {
+            e.preventDefault();
+
+            const dropArea = document.getElementById("drop-file");
+            dropArea.classList.remove("highlight");
+        }
+
+        function dropImage(e) {
+            e.preventDefault();
+
+            const files_dropped = e.dataTransfer.files;
+            setImageFile(files_dropped);
+
+            handleFiles();
+            unhighlight(e);
+        }
+
+        const dropArea = document.getElementById("drop-file");
+
+        dropArea.addEventListener("dragenter", highlight);
+        dropArea.addEventListener("dragover", highlight);
+        dropArea.addEventListener("dragleave", unhighlight);
+
+        dropArea.addEventListener("drop", dropImage);
+
+    </script>
+    </div>
 </body>
 
 </html>

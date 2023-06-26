@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+<body>
+
+<div th:fragment="board-text" class="board-text">
+    <style>
+        .board-text {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .board-text > * {
+            margin: 5px;
+            padding: 20px;
+        }
+        .board-text #board-text {
+            width: calc(100% - 60px);
+            height: calc(100% - 30px); resize: none;
+
+            margin: 30px;
+            padding: 10px;
+        }
+    </style>
+    <textarea
+            id="board-text" name="message"
+            placeholder="내용을 입력해주세요!"
+    ></textarea>
+
+    <script>
+        function getNoticeContent() {
+            const input = document.getElementById('board-text');
+            return input.value;
+        }
+        function setNoticeContent(content) {
+            const input = document.getElementById('board-text');
+            input.value = content;
+        }
+
+        const textarea = document.querySelector('#board-text');
+        textarea.addEventListener('input', function(e) {
+            localStorage.setItem('notice-content', getNoticeContent());
+        });
+        const notice_content_loaded = localStorage.getItem('notice-content');
+        setNoticeContent(notice_content_loaded);
+    </script>
+</div>
+
+<div th:fragment="selector-platform" class="selector-platform" id="selector-platform">
+    <style>
+        .selector-platform {
+            margin: 5px;
+        }
+        .platform {
+            position: relative;
+
+            float: left;
+
+            margin: 5px;
+            padding: 5px;
+        }
+        .selected {
+            border-radius: 10px;
+
+            color: white;
+            background-color: green;
+
+            animation: fade-in 0.5s forwards;
+        }
+        @keyframes fade-in {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+    </style>
+
+    <div><br></div>
+    <th:block th:each="panel : ${panels}">
+        <div th:id="platform-btn-${panel?.id}" th:panelid="${panel?.id}"
+             class="platform selected text-center"
+             th:onclick="|toggleHandler('platform-btn-${panel?.id}|')"
+             th:text="${panel?.description}"
+        >
+            Description
+        </div>
+    </th:block>
+
+    <script>
+        function getPlatforms() {
+            const eleSelected = document.querySelectorAll('#selector-platform .selected');
+            const panel_id_selected = Array.from(eleSelected).map((El) => {
+                return El.getAttribute('panelid');
+            });
+            return panel_id_selected;
+        }
+
+        function resetPlatforms() {
+            const elePlatform = document.querySelectorAll('#selector-platform .platform');
+            elePlatform.map((El) => {
+                El.classList.remove('selected');
+            });
+        }
+
+        function toggleHandler(id) {
+            const input = document.getElementById(id);
+            input.classList.toggle("selected");
+        }
+    </script>
+</div>
+
+<div th:fragment="notice-button" class="notice-button">
+    <style>
+        .notice-button {
+            display: flex;
+            justify-content: center;
+
+            min-height: 32px;
+            width: 160px;
+        }
+    </style>
+    <button type="button" class="btn btn-dark notice-button" onclick="handlerNoticeButton()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+        </svg>
+    </button>
+    <script>
+    function handlerNoticeButton() {
+        const image = getImageFile();
+        const content = getNoticeContent();
+        const platforms = getPlatforms();
+
+        post(`/api/v1/notice`).then((res) => {
+            setNoticeContent("");
+            setImgSrc("#");
+            resetPlatforms();
+        }).catch(doWhenErr);
+    }
+    </script>
+</div>
+
+<div th:fragment="list-notice" class="list-notice">
+    <style>
+        .list-notice {
+            display: flex;
+            flex-direction: column;
+
+            margin: 30px;
+        }
+
+        .list-notice table {
+            width: 100%;
+            table-layout: fixed;
+        }
+        .list-notice table tr {
+            height: 10px;
+            border-bottom: 1px double black;
+        }
+        .list-notice table tr td {
+            overflow: hidden;
+            word-wrap: break-word;
+
+            padding: 10px
+        }
+
+        .list-notice table tr:nth-child(odd) {
+            background-color: #42A77D;
+            color: white;
+        }
+
+        .list-notice .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            width: 100%;
+        }
+        .list-notice .button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            border: 1px solid #004C2C;
+            border-radius: 5px;
+
+            color: white;
+            background-color: green;
+
+            animation: fade-in 0.5s forwards;
+            cursor: pointer;
+        }
+        .list-notice .pagination > .button {
+            height: 48px;
+            width: 48px;
+
+            margin: 5px;
+        }
+        .list-notice table .button {
+            padding: 10px;
+        }
+        .list-notice .notice-img {
+            height: calc(10vh - 6px);
+            width: calc(100% - 6px);
+
+            padding: 3px;
+
+            object-fit: contain;
+        }
+        .list-notice .notice-desc {
+            height: calc(10vh - 6px);
+            width: calc(100% - 6px);
+
+            display: flex;
+            align-items: center;
+
+            padding: 3px;
+        }
+    </style>
+    <div>
+        <h2>
+            이전 공지 목록
+        </h2>
+    </div>
+    <table>
+        <colgroup>
+            <col style="width: 15%;">
+            <col style="width: 55%;">
+            <col style="width: 5%;">
+        </colgroup>
+        <th:block th:each="notice : ${notices}">
+        <tr>
+            <td>
+                <img class="notice-img" th:src="${notice?.image}">
+            </td>
+            <td>
+                <div class="notice-desc" th:text="${notice?.content}">
+                    desc
+                </div>
+            </td>
+            <td>
+                <div class="button" th:onclick="|takeNoticeHistory(${notice?.id})|">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                        <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                        <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                    </svg>
+                </div>
+            </td>
+        </tr>
+        </th:block>
+    </table>
+    <div class="pagination">
+        <div id="btn-next-page" class="button" onclick="nextPage()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+            </svg>
+        </div>
+        <div id="btn-previous-page" class="button" onclick="previousPage()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+            </svg>
+        </div>
+    </div>
+    <script inline="javascript">
+    function takeNoticeHistory(noticeId) {
+        get(`/api/v1/notice/${noticeId}`).then((res) => {
+            setNoticeContent(res.content);
+            setImgSrc(res.image);
+        }).catch(doWhenErr);
+    }
+
+    function getPage() {
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        return urlParams.get('page');
+    }
+    function setBtnDisable() {
+        const el_next = document.querySelector('#btn-next-page');
+        const el_previous = document.querySelector('#btn-previous-page');
+
+        el_next.disable = ![[${hasNext}]];
+        el_previous.disable = ![[${hasPrevious}]];
+    }
+    setBtnDisable();
+
+    function nextPage() {
+        if([[${hasNext}]]) {
+            navigate(`/notice?page=${getPage() + 1}`);
+        }
+    }
+    function previousPage() {
+        if([[${hasPrevious}]]) {
+            navigate(`/notice?page=${getPage() - 1}`);
+        }
+    }
+    </script>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+</body>
+
+</html>
