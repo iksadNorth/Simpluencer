@@ -15,7 +15,106 @@
     </div>
 
     <div th:fragment="header">
-        <div>header</div>
+        <style>
+            :root {
+                --sidebar-width: 300px;
+            }
+            .sidebar {
+                position: fixed;
+                top: 0; left: 0;
+
+                height: 200vh;
+                width: var(--sidebar-width);
+
+                background-color: #A0A0A0;
+            }
+            .sidebar > * {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+
+                width: 80%;
+
+                margin: 25px auto;
+                padding: 30px;
+            }
+
+            .bio {
+                font-family: 'Hanna', sans-serif;
+            }
+            .auth-page {
+                height: auto;
+            }
+            .func-page {
+                height: auto;
+            }
+
+            .row-gap > * {
+                margin-top: 10px;
+            }
+            .const-btn > button {
+                width: 150px;
+            }
+
+            body {
+                margin-left: var(--sidebar-width);
+            }
+        </style>
+        <div class="sidebar">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSV2QM2ty_66ss8TbZEzFZwmRiLZ-Hk-AE95Q&usqp=CAU"
+                 alt="Simpluencer">
+
+            <div class="frame auth-page row-gap const-btn">
+                <th:block th:if="${isAuthenticated}">
+                <card class="bio">
+                    '<span th:text="${principal.nickname}" />' 님
+                </card>
+                <button class="btn btn-dark" th:onclick="logout()">로그아웃</button>
+                </th:block>
+
+                <th:block th:unless="${isAuthenticated}">
+                <card class="bio">
+                    로그인 해주세요!
+                </card>
+                <button class="btn btn-dark" th:onclick="|navigateTo('@{/auth/login}')|">로그인</button>
+                <button class="btn btn-dark" th:onclick="|navigateTo('@{/user/create}')|">회원 가입</button>
+                </th:block>
+            </div>
+
+            <div class="frame func-page row-gap const-btn" th:if="${isAuthenticated}">
+                <button class="btn btn-dark" th:onclick="|navigateTo('@{/profile/read}/${principal.id}')|">디지털 명함</button>
+                <button class="btn btn-dark" th:onclick="|navigateTo('@{/platform/create}')|">프로필 설정</button>
+                <button class="btn btn-dark" th:onclick="|navigateTo('@{/notice/create}')|">공지 작성</button>
+            </div>
+
+            <div class="frame func-page row-gap const-btn" th:if="${isAuthenticated}">
+                <card class="bio">
+                    디지털 명함 링크
+                </card>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" onclick="copyToClipboard()" style="cursor: pointer;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard-check" viewBox="0 0 16 16">
+                          <path fill-rule="evenodd" d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+                          <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+                          <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+                        </svg>
+                    </span>
+                    <input type="text" class="form-control" disabled th:value="|@{/profile/read}/${principal.id}|">
+                </div>
+            </div>
+        </div>
+        <script>
+            function logout() {
+                post(`/api/v1/auth/logout`)
+                .catch(doWhenErr);
+            }
+
+            function copyToClipboard() {
+                const link = "[[|/profile/read/${principal?.id}|]]";
+                window.navigator.clipboard.writeText(link);
+                doWhenErr("링크 복사 완료!");
+            }
+        </script>
     </div>
 
     <div th:fragment="footer">

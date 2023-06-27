@@ -10,7 +10,8 @@
 <body>
     <div th:insert="~{../../templates/component/common :: header}"></div>
 
-    <div class="container text-center root rounded-4 shadow border border-dark" >
+    <div class="container text-center root">
+        <div class="frame">
         <div class="row">
             <!--로고 삽입-->
             <div class="col" th:insert="~{../../templates/component/login :: img-logo}"></div>
@@ -18,8 +19,8 @@
 
         <div class="row">
             <div class="col">
-                <h1>
-                    Sign In
+                <h1 class="hangle">
+                    로그인
                 </h1>
             </div>
         </div>
@@ -50,6 +51,7 @@
             <!--로그인 버튼-->
             <div class="col" th:insert="~{../../templates/component/login :: btn-login}"></div>
         </div>
+    </div>
     </div>
 
     <div th:insert="~{../../templates/component/common :: footer}"></div>
