@@ -62,7 +62,7 @@ public class AuthenticationConfig {
                                 .usernameParameter("username")
                                 .passwordParameter("password")
 
-                                .defaultSuccessUrl("/")
+                                .defaultSuccessUrl("/platform/create")
                                 .failureHandler(authenticationFailureHandler)
 
                                 .permitAll()

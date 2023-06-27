@@ -10,20 +10,18 @@
 <body>
     <div th:insert="~{../../templates/component/common :: header}"></div>
 
-    <div class="container pair rounded-2 shadow border border-dark-subtle" >
-        <div class="row h-100" >
+    <div class="container pair" >
+        <div class="row h-100 frame" >
             <div class="col-4">
                 <div th:replace="~{../../templates/component/profile :: avatar}"></div>
             </div>
-            <div class="col">
+            <div class="col h-100">
                 <div th:replace="~{../../templates/component/profile :: introduction}"></div>
             </div>
         </div>
 
-        <div style="border-top: 1px solid #000;"></div>
-
         <div class="row" >
-            <div class="col bucket">
+            <div class="col bucket frame">
                 <th:block th:each="panel : ${profile.panels}">
                     <div th:replace="~{../../templates/component/profile :: panel}"></div>
                 </th:block>

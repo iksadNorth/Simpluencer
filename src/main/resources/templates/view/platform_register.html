@@ -10,17 +10,17 @@
 <body>
     <div th:insert="~{../../templates/component/common :: header}"></div>
 
-    <div class="container pair rounded-2 shadow border border-dark-subtle" >
+    <div class="container pair" >
         <div class="row h-100" >
-            <div class="col-4">
+            <div class="col frame">
                 <div th:replace="~{../../templates/component/profile :: avatar_setter}"></div>
             </div>
-            <div class="col">
+            <div class="col frame">
                 <div th:replace="~{../../templates/component/profile :: introduction_setter}"></div>
             </div>
         </div>
 
-        <div class="row" >
+        <div class="row frame" >
             <div class="col">
                 <div class="d-flex gap-2 justify-content-start py-2">
                     <th:block th:each="platform : ${platforms}">
@@ -30,9 +30,7 @@
             </div>
         </div>
 
-        <div style="border-top: 1px solid #000;"></div>
-
-        <div class="row" >
+        <div class="row frame" >
             <div class="col bucket">
                 <th:block th:each="panel : ${panels}">
                     <div th:replace="~{../../templates/component/platform :: card_platform}"></div>
