@@ -30,12 +30,14 @@ public class NoticeServiceImpl implements NoticeService {
 
     @Override
     public void create(Long agentId, NoticeCreateRequest request) {
+        boolean doHaveNotRequiredAttr = true;
         Notice entity = new Notice();
 
         // 이미지 업로드하고
         MultipartFile image = request.image();
         String imageUri = null;
-        if (!image.isEmpty()) {
+        if (image != null && !image.isEmpty()) {
+            doHaveNotRequiredAttr = false;
             imageUri = imageService.save(image);
             entity.setImageUri(imageUri);
         }
@@ -53,10 +55,13 @@ public class NoticeServiceImpl implements NoticeService {
         // 공지 테이블에 저장.
         String content = request.content();
         if (!VarInspectUtils.isBlank(content)) {
+            doHaveNotRequiredAttr = false;
             entity.setContent(content);
         }
 
-        noticeRepository.save(entity);
+        if(!doHaveNotRequiredAttr) {
+            noticeRepository.save(entity);
+        }
     }
 
     @Override
