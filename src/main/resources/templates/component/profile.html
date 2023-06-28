@@ -168,10 +168,18 @@
             });
 
             const formdata = new FormData();
-            formdata.append("nickname", nickname);
-            formdata.append("introduction", introduction);
-            formdata.append("image", file);
-            formdata.append("locations", locations);
+            if(nickname) {
+                formdata.append("nickname", nickname);
+            }
+            if(introduction) {
+                formdata.append("introduction", introduction);
+            }
+            if(file) {
+                formdata.append("image", file);
+            }
+            if(locations) {
+                formdata.append("locations", locations);
+            }
 
             post(`/api/v1/profile`, {
                 noContentType: true,

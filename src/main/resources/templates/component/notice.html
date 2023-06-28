@@ -137,9 +137,15 @@
         const platforms = getPlatforms();
 
         const formdata = new FormData();
-        formdata.append('image', image[0]);
-        formdata.append('content', content);
-        formdata.append('platforms', platforms);
+        if(image[0]) {
+            formdata.append('image', image[0]);
+        }
+        if(content) {
+            formdata.append('content', content);
+        }
+        if(platforms) {
+            formdata.append('platforms', platforms);
+        }
 
         post(`/api/v1/notice`, {
             body: formdata,
