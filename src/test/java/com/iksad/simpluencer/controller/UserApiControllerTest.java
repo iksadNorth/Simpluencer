@@ -6,6 +6,7 @@ import com.iksad.simpluencer.model.request.UserRequest;
 import com.iksad.simpluencer.service.AgentService;
 import com.iksad.simpluencer.tools.MockBeansForController;
 import com.iksad.simpluencer.tools.MockMvcTools;
+import com.iksad.simpluencer.tools.MockSecurityContextFactory.WithMockPrincipal;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Slf4j
-@WithMockUser
+@WithMockPrincipal
 @WebMvcTest(UserApiController.class)
 @MockBeansForController
 @DisplayName("[UserApiController]")

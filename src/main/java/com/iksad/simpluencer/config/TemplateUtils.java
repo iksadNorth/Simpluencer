@@ -21,7 +21,8 @@ public class TemplateUtils {
         String baseUrl = String.format("%s://%s:%s", serverProperties.getSchema(), serverProperties.getAddress(), serverProperties.getPort());
         templateTable.put("baseUrl", baseUrl);
 
-        templateTable.put("registrationId", args.registrationId().toLowerCase());
+        OAuth2ProviderType nameForRedirectUrl = OAuth2ProviderType.valueOf(args.registrationId());
+        templateTable.put("registrationId", nameForRedirectUrl.getProviderNameForRedirectUrl());
 
         return templateTable;
     }

@@ -3,7 +3,7 @@ package com.iksad.simpluencer.service;
 import com.iksad.simpluencer.model.PlatformTypeDto;
 import com.iksad.simpluencer.type.PlatformType;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import com.iksad.simpluencer.repository.ClientRegistrationRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

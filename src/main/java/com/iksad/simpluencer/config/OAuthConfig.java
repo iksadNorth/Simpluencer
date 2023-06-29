@@ -1,13 +1,13 @@
 package com.iksad.simpluencer.config;
 
+import com.iksad.simpluencer.Properties.OAuth2ClientProperties;
 import com.iksad.simpluencer.Properties.ServerProperties;
+import com.iksad.simpluencer.model.ClientRegistration;
+import com.iksad.simpluencer.repository.ClientRegistrationRepository;
+import com.iksad.simpluencer.repository.InMemoryClientRegistrationRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.oauth2.client.registration.ClientRegistration;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 
 import java.util.List;
 import java.util.Map;

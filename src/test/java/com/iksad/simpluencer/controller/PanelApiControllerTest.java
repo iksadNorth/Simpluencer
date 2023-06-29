@@ -5,6 +5,7 @@ import com.iksad.simpluencer.model.request.PanelUpdateRequest;
 import com.iksad.simpluencer.service.PanelService;
 import com.iksad.simpluencer.tools.MockBeansForController;
 import com.iksad.simpluencer.tools.MockMvcTools;
+import com.iksad.simpluencer.tools.MockSecurityContextFactory.WithMockPrincipal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,13 +13,12 @@ import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WithMockUser
+@WithMockPrincipal
 @WebMvcTest(PanelApiController.class)
 @MockBeansForController
 @MockBean(PanelService.class)
