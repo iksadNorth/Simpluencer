@@ -2,5 +2,5 @@ spring:
   profiles:
     default: local
     group:
-      local: thymeleaf-local, datasource-local, h2db-local, email-local, oauth-local, jpa-local, server-local, image-bucket-local
+      local: thymeleaf-local, datasource-local, h2db-local, email-local, oauth-local, jpa-local, server-local, image-bucket-local, redis-local
       prod: thymeleaf-prod

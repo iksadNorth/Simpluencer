@@ -1,14 +1,17 @@
 package com.iksad.simpluencer.utils;
 
+import com.iksad.simpluencer.model.ClientRegistration;
+import com.iksad.simpluencer.tools.MockSecurityContextFactory.WithMockPrincipal;
+import com.iksad.simpluencer.type.AuthorizationGrantType;
+import com.iksad.simpluencer.type.IdTokenClaimNames;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.security.oauth2.client.registration.ClientRegistration;
-import org.springframework.security.oauth2.core.AuthorizationGrantType;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
+@WithMockPrincipal
 @DisplayName("[OAuthRequestUriUtils]")
 class OAuthRequestUriUtilsTest {
 
@@ -35,6 +38,7 @@ class OAuthRequestUriUtilsTest {
 
                 .authorizationUri(authorizationUri)
                 .tokenUri(tokenUri)
+                .userNameAttributeName(IdTokenClaimNames.SUB)
 
                 .build();
 

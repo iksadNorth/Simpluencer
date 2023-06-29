@@ -6,15 +6,15 @@ import com.iksad.simpluencer.exception.ErrorType.NoticeNotFoundType;
 import com.iksad.simpluencer.model.WebApiNoticeCreateDto;
 import com.iksad.simpluencer.model.request.NoticeCreateRequest;
 import com.iksad.simpluencer.model.response.NoticeReadResponse;
+import com.iksad.simpluencer.repository.NoticeApiRepository.NoticeApiRepository;
 import com.iksad.simpluencer.repository.NoticeRepository;
 import com.iksad.simpluencer.repository.PanelRepository;
-import com.iksad.simpluencer.repository.WebApiRepository;
 import com.iksad.simpluencer.utils.VarInspectUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -26,7 +26,7 @@ public class NoticeServiceImpl implements NoticeService {
     private final NoticeRepository noticeRepository;
     private final PanelRepository panelRepository;
     private final ImageService imageService;
-    private final WebApiRepository webApiRepository;
+    private final NoticeApiRepository noticeApiRepository;
 
     @Override
     public void create(Long agentId, NoticeCreateRequest request) {
@@ -50,7 +50,7 @@ public class NoticeServiceImpl implements NoticeService {
 
         Long[] panelIds = request.platforms();
         List<Panel> panelsSelected = panelRepository.findAllById(List.of(panelIds));
-        panelsSelected.forEach(panel -> webApiRepository.createNotice(panel, noticeCreateDto));
+        panelsSelected.forEach(panel -> noticeApiRepository.createNotice(panel, noticeCreateDto));
 
         // 공지 테이블에 저장.
         String content = request.content();

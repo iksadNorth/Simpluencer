@@ -1,10 +1,9 @@
 package com.iksad.simpluencer.model;
 
+import com.iksad.simpluencer.repository.ClientRegistrationRepository;
 import com.iksad.simpluencer.type.PlatformType;
 import com.iksad.simpluencer.utils.OAuthRequestUriUtils;
 import lombok.Builder;
-import org.springframework.security.oauth2.client.registration.ClientRegistration;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 
 @Builder(toBuilder = true)
 public record PlatformTypeDto(

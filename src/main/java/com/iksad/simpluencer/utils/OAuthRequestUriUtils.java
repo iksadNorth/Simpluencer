@@ -1,7 +1,7 @@
 package com.iksad.simpluencer.utils;
 
 import org.springframework.data.util.Pair;
-import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import com.iksad.simpluencer.model.ClientRegistration;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
