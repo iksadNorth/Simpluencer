@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 
 @RequiredArgsConstructor @Getter
 public enum PlatformType {
+    REDDIT("REDDIT", "Reddit", "reddit.png", OAuth2ProviderType.REDDIT),
     GOOGLE("GOOGLE", "Google", "youtube.png", OAuth2ProviderType.GOOGLE);
 
     private final String provider;

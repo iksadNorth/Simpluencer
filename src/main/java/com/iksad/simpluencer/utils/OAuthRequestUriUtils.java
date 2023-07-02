@@ -23,8 +23,6 @@ public class OAuthRequestUriUtils {
 
     static {
         defaultQueries.add("response_type", "code");
-        defaultQueries.add("access_type", "offline");
-        defaultQueries.add("prompt", "consent");
 
         additionQueryFunc.add(Pair.of("redirect_uri", ClientRegistration::getRedirectUri));
         additionQueryFunc.add(Pair.of("client_id", ClientRegistration::getClientId));

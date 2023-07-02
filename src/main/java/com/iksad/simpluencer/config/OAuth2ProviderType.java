@@ -3,6 +3,7 @@ package com.iksad.simpluencer.config;
 import com.iksad.simpluencer.Properties.ServerProperties;
 import com.iksad.simpluencer.model.ClientRegistration;
 import com.iksad.simpluencer.repository.NoticeApiRepository.GoogleNoticeApiRepository;
+import com.iksad.simpluencer.repository.NoticeApiRepository.RedditNoticeApiRepository;
 import com.iksad.simpluencer.repository.NoticeApiRepository.ProviderNoticeApiRepository;
 import com.iksad.simpluencer.service.OAuth2TokenManager;
 import com.iksad.simpluencer.type.AuthorizationGrantType;
@@ -26,11 +27,30 @@ public enum OAuth2ProviderType {
             ClientRegistration.ClientRegistrationBuilder builder = getBuilder(registrationId,
                     ClientAuthenticationMethod.CLIENT_SECRET_BASIC, DEFAULT_REDIRECT_URL, serverProperties);
             builder.scope(new String[]{"profile", "email"});
-            builder.authorizationUri("https://accounts.google.com/o/oauth2/v2/auth");
+            builder.authorizationUri("https://accounts.google.com/o/oauth2/v2/auth?access_type=offline&prompt=consent");
             builder.tokenUri("https://www.googleapis.com/oauth2/v4/token");
             builder.userInfoUri("https://www.googleapis.com/oauth2/v3/userinfo");
             builder.userNameAttributeName(IdTokenClaimNames.SUB);
             builder.clientName("Google");
+            builder.accountAttributeName("email");
+            return builder;
+        }
+
+    },
+
+    REDDIT("reddit", RedditNoticeApiRepository::new) {
+
+        @Override
+        public ClientRegistration.ClientRegistrationBuilder getBuilder(String registrationId, ServerProperties serverProperties) {
+            ClientRegistration.ClientRegistrationBuilder builder = getBuilder(registrationId,
+                    ClientAuthenticationMethod.CLIENT_SECRET_BASIC, DEFAULT_REDIRECT_URL, serverProperties);
+            builder.scope(new String[]{"submit", "identity"});
+            builder.authorizationUri("https://www.reddit.com/api/v1/authorize?state=2i3h4kmn5u3nbh5i&duration=temporary");
+            builder.tokenUri("https://www.reddit.com/api/v1/access_token");
+            builder.userInfoUri("https://oauth.reddit.com/api/v1/me");
+            builder.userNameAttributeName(IdTokenClaimNames.ID);
+            builder.clientName("Reddit");
+            builder.accountAttributeName("name");
             return builder;
         }
 

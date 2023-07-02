@@ -29,6 +29,7 @@ public final class ClientRegistration {
     private final String tokenUri;
     private final String userInfoUri;
     private final IdTokenClaimNames userNameAttributeName;
+    private final String accountAttributeName;
 
     public static ClientRegistrationBuilder withRegistrationId(String registrationId) {
         return ClientRegistration.builder().registrationId(registrationId);
@@ -40,7 +41,7 @@ public final class ClientRegistration {
 
     public OAuth2ClientProperties.Registration getRegistration() {
         return OAuth2ClientProperties.Registration.builder()
-                .clientAuthenticationMethod(this.clientAuthenticationMethod.getValue())
+                .clientAuthenticationMethod(this.clientAuthenticationMethod.name())
                 .authorizationGrantType(this.authorizationGrantType.getResponseType())
                 .clientId(this.clientId)
                 .clientSecret(this.clientSecret)

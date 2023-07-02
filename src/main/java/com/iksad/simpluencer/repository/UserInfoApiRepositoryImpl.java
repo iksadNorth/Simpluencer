@@ -17,19 +17,19 @@ import java.util.Map;
 public class UserInfoApiRepositoryImpl implements UserInfoApiRepository {
     private final RestTemplate restTemplate;
     private final OAuth2TokenManager oAuth2TokenManager;
-    private final ParameterizedTypeReference<Map<String, String>> typeReference = new ParameterizedTypeReference<>() {};
+    private final ParameterizedTypeReference<Map<String, Object>> typeReference = new ParameterizedTypeReference<>() {};
 
     @Override
     public OAuth2UserInfoResponse readUserInfo(ClientRegistration clientRegistration, OAuth2TokenResponse tokenResponse) {
         String userInfoUri = clientRegistration.getUserInfoUri();
 
         HttpEntity<Void> httpEntity = getHttpEntityForJson(tokenResponse.accessToken());
-        ResponseEntity<Map<String, String>> response = restTemplate.exchange(userInfoUri, HttpMethod.GET, httpEntity, this.typeReference);
-        Map<String, String> responseBody = response.getBody();
+        ResponseEntity<Map<String, Object>> response = restTemplate.exchange(userInfoUri, HttpMethod.GET, httpEntity, this.typeReference);
+        Map<String, Object> responseBody = response.getBody();
 
         String keyOfId = clientRegistration.getUserNameAttributeName().getIdAttr();
-        String principalName = responseBody.getOrDefault(keyOfId, null);
-        String principalAccount = responseBody.getOrDefault("email", null);
+        String principalName = (String) responseBody.getOrDefault(keyOfId, null);
+        String principalAccount = (String) responseBody.getOrDefault(clientRegistration.getAccountAttributeName(), null);
         return OAuth2UserInfoResponse.builder()
                 .principalName(principalName)
                 .account(principalAccount)
