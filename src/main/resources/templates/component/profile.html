@@ -89,7 +89,7 @@
 
         <image
                 id="previewImage"
-                th:xlink:href="@{/img/{icon}(icon=${profile.profileImage})}"
+                th:xlink:href="@{${profile.profileImage} ? '/img/' + ${profile.profileImage} : null}"
                 width="100%" height="100%"
                 clip-path="url(#circleClip)"
         />
