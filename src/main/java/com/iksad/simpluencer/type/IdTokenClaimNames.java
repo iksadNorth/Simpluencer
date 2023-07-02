@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor @Getter
 public enum IdTokenClaimNames {
+    ID("id"),
     SUB("sub");
 
     private final String idAttr;

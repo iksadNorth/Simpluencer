@@ -21,7 +21,8 @@ public abstract class WebApiRepository<Request, Response> {
 
     public abstract HttpMethod getMethod();
     public abstract String getUri();
-    public abstract Map<String, Object> fromRequest(Request request);
+    public abstract void addHeaders(HttpHeaders headers);
+    public abstract Object fromRequest(Request request);
     public abstract Response toResponse(Map<String, Object> response);
 
     public Response fetch(String providerName, String principalName, Request request) {
@@ -37,7 +38,7 @@ public abstract class WebApiRepository<Request, Response> {
 
     private Response get(String providerName, String principalName, Request request) {
         HttpHeaders headers = getHeaders(providerName, principalName);
-        String uriAddedParams = addParams(fromRequest(request)).apply(getUri());
+        String uriAddedParams = addParams((Map<String, Object>) fromRequest(request)).apply(getUri());
 
         HttpEntity<Void> httpEntity = new HttpEntity<>(null, headers);
         Map<String, Object> response = this.restTemplate.exchange(uriAddedParams, HttpMethod.GET, httpEntity, this.parameterizedTypeReference).getBody();
@@ -47,7 +48,7 @@ public abstract class WebApiRepository<Request, Response> {
     private Response post(String providerName, String principalName, Request body) {
         HttpHeaders headers = getHeaders(providerName, principalName);
 
-        HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(fromRequest(body), headers);
+        HttpEntity<Object> httpEntity = new HttpEntity<>(fromRequest(body), headers);
         Map<String, Object> response = this.restTemplate.exchange(getUri(), HttpMethod.GET, httpEntity, this.parameterizedTypeReference).getBody();
         return toResponse(response);
     }
@@ -55,13 +56,14 @@ public abstract class WebApiRepository<Request, Response> {
     protected static HttpHeaders getHeaders(String accessToken) {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(accessToken);
-        headers.setContentType(MediaType.APPLICATION_JSON);
         return headers;
     }
 
     protected HttpHeaders getHeaders(String providerName, String principalName) {
         String accessToken = this.oAuth2TokenManager.getAccessToken(providerName, principalName);
-        return getHeaders(accessToken);
+        HttpHeaders headers = getHeaders(accessToken);
+        this.addHeaders(headers);
+        return headers;
     }
 
     protected static Function<String,String> addParams(Map<String, Object> params) {

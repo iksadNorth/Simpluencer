@@ -2,13 +2,13 @@ package com.iksad.simpluencer.repository;
 
 import com.iksad.simpluencer.model.ClientRegistration;
 import com.iksad.simpluencer.model.response.OAuth2TokenResponse;
-import lombok.Builder;
+import com.iksad.simpluencer.type.ClientAuthenticationMethod;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Component;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
@@ -23,7 +23,7 @@ public class OAuth2AccessTokenRepositoryImpl implements OAuth2AccessTokenReposit
     public OAuth2TokenResponse getAccessTokenByCode(ClientRegistration clientRegistration, String code) {
         String tokenUri = clientRegistration.getTokenUri();
 
-        HttpEntity<OAuth2CodeRequest> httpEntity = CodeToAccessToken(clientRegistration, code);
+        HttpEntity<MultiValueMap<String, Object>> httpEntity = CodeToAccessToken(clientRegistration, code);
         ResponseEntity<Map<String, String>> responseEntity = restTemplate.exchange(tokenUri, HttpMethod.POST, httpEntity, typeReference);
         Map<String, String> entityBody = responseEntity.getBody();
         return OAuth2TokenResponse.of(entityBody);
@@ -33,47 +33,45 @@ public class OAuth2AccessTokenRepositoryImpl implements OAuth2AccessTokenReposit
     public OAuth2TokenResponse getAccessTokenByRefreshCode(ClientRegistration clientRegistration, String refreshToken) {
         String tokenUri = clientRegistration.getTokenUri();
 
-        HttpEntity<OAuth2RefreshRequest> httpEntity = RefreshTokenToAccessToken(clientRegistration, refreshToken);
+        HttpEntity<MultiValueMap<String, Object>> httpEntity = RefreshTokenToAccessToken(clientRegistration, refreshToken);
         ResponseEntity<Map<String, String>> responseEntity = restTemplate.exchange(tokenUri, HttpMethod.POST, httpEntity, typeReference);
         Map<String, String> entityBody = responseEntity.getBody();
         return OAuth2TokenResponse.of(entityBody);
     }
 
-    private static HttpEntity<OAuth2CodeRequest> CodeToAccessToken(ClientRegistration clientRegistration, String code) {
-        return new HttpEntity<>(OAuth2CodeRequest.builder()
-                .code(code)
-                .clientId(clientRegistration.getClientId())
-                .clientSecret(clientRegistration.getClientSecret())
-                .redirectUri(clientRegistration.getRedirectUri())
-                .grantType(clientRegistration.getAuthorizationGrantType().getCodeToAccessToken())
-                .build());
+    private static HttpEntity<MultiValueMap<String, Object>> CodeToAccessToken(ClientRegistration clientRegistration, String code) {
+        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+        body.add("code", code);
+        body.add("redirect_uri", clientRegistration.getRedirectUri());
+        body.add("grant_type", clientRegistration.getAuthorizationGrantType().getCodeToAccessToken());
+        if (clientRegistration.getClientAuthenticationMethod().equals(ClientAuthenticationMethod.CLIENT_SECRET_POST)) {
+            body.add("client_id", clientRegistration.getClientId());
+            body.add("client_secret",  clientRegistration.getClientSecret());
+        }
+
+        return new HttpEntity<>(body, getHeaders(clientRegistration));
     }
 
-    private static HttpEntity<OAuth2RefreshRequest> RefreshTokenToAccessToken(ClientRegistration clientRegistration, String refreshToken) {
-        return new HttpEntity<>(OAuth2RefreshRequest.builder()
-                .refreshToken(refreshToken)
-                .clientId(clientRegistration.getClientId())
-                .clientSecret(clientRegistration.getClientSecret())
-                .redirectUri(clientRegistration.getRedirectUri())
-                .grantType(clientRegistration.getAuthorizationGrantType().getRefreshToAccessToken())
-                .build());
+    private static HttpEntity<MultiValueMap<String, Object>> RefreshTokenToAccessToken(ClientRegistration clientRegistration, String refreshToken) {
+        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+        body.add("refresh_token", refreshToken);
+        body.add("redirect_uri", clientRegistration.getRedirectUri());
+        body.add("grant_type", clientRegistration.getAuthorizationGrantType().getRefreshToAccessToken());
+        if (clientRegistration.getClientAuthenticationMethod().equals(ClientAuthenticationMethod.CLIENT_SECRET_POST)) {
+            body.add("client_id", clientRegistration.getClientId());
+            body.add("client_secret",  clientRegistration.getClientSecret());
+        }
+
+        return new HttpEntity<>(body, getHeaders(clientRegistration));
     }
 
-    @Builder(toBuilder = true)
-    public static record OAuth2CodeRequest(
-            String code,
-            String clientId,
-            String clientSecret,
-            String redirectUri,
-            String grantType
-    ) {}
+    private static HttpHeaders getHeaders(ClientRegistration clientRegistration) {
+        HttpHeaders headers = new HttpHeaders();
+        if (clientRegistration.getClientAuthenticationMethod().equals(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)) {
+            headers.setBasicAuth(clientRegistration.getClientId(), clientRegistration.getClientSecret());
+            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        }
 
-    @Builder(toBuilder = true)
-    public static record OAuth2RefreshRequest(
-            String refreshToken,
-            String clientId,
-            String clientSecret,
-            String redirectUri,
-            String grantType
-    ) {}
+        return headers;
+    }
 }

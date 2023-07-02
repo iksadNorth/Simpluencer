@@ -2,6 +2,7 @@ package com.iksad.simpluencer.repository.NoticeApiRepository;
 
 import com.iksad.simpluencer.model.WebApiNoticeCreateDto;
 import com.iksad.simpluencer.service.OAuth2TokenManager;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
 
@@ -21,6 +22,9 @@ public class GoogleNoticeApiRepository extends ProviderNoticeApiRepository {
     public String getUri() {
         return null;
     }
+
+    @Override
+    public void addHeaders(HttpHeaders headers) {}
 
     @Override
     public Map<String, Object> fromRequest(WebApiNoticeCreateDto webApiNoticeCreateDto) {
