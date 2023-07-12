@@ -1,14 +1,12 @@
-package com.iksad.simpluencer.config;
+package com.iksad.simpluencer.type;
 
 import com.iksad.simpluencer.Properties.ServerProperties;
+import com.iksad.simpluencer.utils.TemplateUtils;
 import com.iksad.simpluencer.model.ClientRegistration;
 import com.iksad.simpluencer.repository.NoticeApiRepository.GoogleNoticeApiRepository;
 import com.iksad.simpluencer.repository.NoticeApiRepository.RedditNoticeApiRepository;
 import com.iksad.simpluencer.repository.NoticeApiRepository.ProviderNoticeApiRepository;
 import com.iksad.simpluencer.service.OAuth2TokenManager;
-import com.iksad.simpluencer.type.AuthorizationGrantType;
-import com.iksad.simpluencer.type.ClientAuthenticationMethod;
-import com.iksad.simpluencer.type.IdTokenClaimNames;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.client.RestTemplate;
@@ -16,11 +14,18 @@ import org.springframework.web.client.RestTemplate;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
-import static com.iksad.simpluencer.config.TemplateUtils.substituteProperties;
+import static com.iksad.simpluencer.utils.TemplateUtils.DEFAULT_REDIRECT_URL;
+import static com.iksad.simpluencer.utils.TemplateUtils.substituteProperties;
 
 @RequiredArgsConstructor @Getter
 public enum OAuth2ProviderType {
-    GOOGLE("google", GoogleNoticeApiRepository::new) {
+    GOOGLE(
+            "google",
+            "GOOGLE",
+            "Google",
+            "youtube.png",
+            GoogleNoticeApiRepository::new
+    ) {
 
         @Override
         public ClientRegistration.ClientRegistrationBuilder getBuilder(String registrationId, ServerProperties serverProperties) {
@@ -38,7 +43,13 @@ public enum OAuth2ProviderType {
 
     },
 
-    REDDIT("reddit", RedditNoticeApiRepository::new) {
+    REDDIT(
+            "reddit",
+            "REDDIT",
+            "Reddit",
+            "reddit.png",
+            RedditNoticeApiRepository::new
+    ) {
 
         @Override
         public ClientRegistration.ClientRegistrationBuilder getBuilder(String registrationId, ServerProperties serverProperties) {
@@ -56,8 +67,6 @@ public enum OAuth2ProviderType {
 
     };
 
-    private static final String DEFAULT_REDIRECT_URL = "{baseUrl}/login/oauth2/code/{registrationId}";
-
     protected final ClientRegistration.ClientRegistrationBuilder getBuilder(String registrationId, ClientAuthenticationMethod method,
                                                           String redirectUri, ServerProperties serverProperties) {
         TemplateUtils.Args args = TemplateUtils.Args.builder()
@@ -72,13 +81,24 @@ public enum OAuth2ProviderType {
         return builder;
     }
 
-    public abstract ClientRegistration.ClientRegistrationBuilder getBuilder(String registrationId, ServerProperties serverProperties);
     public final String providerNameForRedirectUrl;
+    private final String provider;
+    private final String frontName;
+    private final String icon;
     public final BiFunction<RestTemplate, OAuth2TokenManager, ProviderNoticeApiRepository> constructorNoticeApiRepository;
+
+    public abstract ClientRegistration.ClientRegistrationBuilder getBuilder(String registrationId, ServerProperties serverProperties);
 
     public static OAuth2ProviderType findWithProviderNameForRedirectUrl(String providerNameForRedirectUrl) {
         return Stream.of(OAuth2ProviderType.values())
                 .filter(type -> type.getProviderNameForRedirectUrl().equals(providerNameForRedirectUrl))
                 .findFirst().orElseThrow(IllegalArgumentException::new);
+    }
+
+    public static OAuth2ProviderType providerOf(String arg) {
+        return Stream.of(OAuth2ProviderType.values())
+                .filter(s -> s.getProvider().equals(arg))
+                .findFirst()
+                .orElseThrow(IllegalArgumentException::new);
     }
 }

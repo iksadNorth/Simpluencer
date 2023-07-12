@@ -8,7 +8,7 @@ import com.iksad.simpluencer.service.PlatformService;
 import com.iksad.simpluencer.tools.MockBeansForController;
 import com.iksad.simpluencer.tools.MockMvcTools;
 import com.iksad.simpluencer.tools.MockSecurityContextFactory.WithMockPrincipal;
-import com.iksad.simpluencer.type.PlatformType;
+import com.iksad.simpluencer.type.OAuth2ProviderType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -57,7 +57,7 @@ class PanelControllerTest {
     @Test @DisplayName("[create][정상]Platform이 google로 주어졌을 때, 특정 태그 포함 여부.")
     void createWhenPlatformGiven() throws Exception {
         // Given
-        PlatformTypeDto google = PlatformTypeDto.of(PlatformType.GOOGLE);
+        PlatformTypeDto google = PlatformTypeDto.of(OAuth2ProviderType.GOOGLE);
         given(platformService.getPlatforms()).willReturn(List.of(google));
 
         given(panelService.getPanelsOf(any())).willReturn(List.of());

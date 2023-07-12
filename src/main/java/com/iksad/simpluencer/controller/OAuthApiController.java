@@ -1,6 +1,6 @@
 package com.iksad.simpluencer.controller;
 
-import com.iksad.simpluencer.config.OAuth2ProviderType;
+import com.iksad.simpluencer.type.OAuth2ProviderType;
 import com.iksad.simpluencer.model.request.OAuth2AuthenticationCodeRequest;
 import com.iksad.simpluencer.service.OAuth2TokenService;
 import lombok.RequiredArgsConstructor;

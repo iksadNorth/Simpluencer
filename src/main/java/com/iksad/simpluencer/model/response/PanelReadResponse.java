@@ -1,8 +1,8 @@
 package com.iksad.simpluencer.model.response;
 
 import com.iksad.simpluencer.entity.Panel;
+import com.iksad.simpluencer.type.OAuth2ProviderType;
 import lombok.Builder;
-import com.iksad.simpluencer.type.PlatformType;
 
 @Builder(toBuilder = true)
 public record PanelReadResponse(
@@ -14,7 +14,7 @@ public record PanelReadResponse(
 ) {
     public static PanelReadResponse of(Panel entity) {
         String provider = entity.getProvider();
-        PlatformType type = PlatformType.providerOf(provider);
+        OAuth2ProviderType type = OAuth2ProviderType.providerOf(provider);
         return PanelReadResponse.builder()
                 .id(entity.getId())
                 .frontName(type.getFrontName())

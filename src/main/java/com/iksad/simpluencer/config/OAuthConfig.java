@@ -5,6 +5,7 @@ import com.iksad.simpluencer.Properties.ServerProperties;
 import com.iksad.simpluencer.model.ClientRegistration;
 import com.iksad.simpluencer.repository.ClientRegistrationRepository;
 import com.iksad.simpluencer.repository.InMemoryClientRegistrationRepository;
+import com.iksad.simpluencer.type.OAuth2ProviderType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

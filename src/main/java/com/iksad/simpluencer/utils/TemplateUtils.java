@@ -1,12 +1,14 @@
-package com.iksad.simpluencer.config;
+package com.iksad.simpluencer.utils;
 
 import com.iksad.simpluencer.Properties.ServerProperties;
+import com.iksad.simpluencer.type.OAuth2ProviderType;
 import lombok.Builder;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class TemplateUtils {
+    public static final String DEFAULT_REDIRECT_URL = "{baseUrl}/login/oauth2/code/{registrationId}";
 
     @Builder(toBuilder = true)
     public record Args(
