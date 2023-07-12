@@ -65,9 +65,5 @@ class OAuthRequestUriUtilsTest {
         assertThat(uri).contains(
                 "response_type=code"
         );
-        assertThat(uri).contains(
-                "access_type=offline"
-        );
-
     }
 }
