@@ -1,6 +1,6 @@
 package com.iksad.simpluencer.repository.NoticeApiRepository;
 
-import com.iksad.simpluencer.config.OAuth2ProviderType;
+import com.iksad.simpluencer.type.OAuth2ProviderType;
 import com.iksad.simpluencer.entity.Panel;
 import com.iksad.simpluencer.model.WebApiNoticeCreateDto;
 import com.iksad.simpluencer.service.OAuth2TokenManager;

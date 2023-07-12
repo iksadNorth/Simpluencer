@@ -1,6 +1,7 @@
 package com.iksad.simpluencer.config;
 
 import com.iksad.simpluencer.Properties.ServerProperties;
+import com.iksad.simpluencer.utils.TemplateUtils;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
