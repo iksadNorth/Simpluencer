@@ -12,3 +12,6 @@ spring:
     path: /h2
 
   sql.init.mode: always
+
+  flyway:
+    enabled: false
