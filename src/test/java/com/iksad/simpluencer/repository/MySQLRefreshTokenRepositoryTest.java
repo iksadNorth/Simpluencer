@@ -12,13 +12,12 @@ import org.springframework.test.context.jdbc.Sql;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
-@ActiveProfiles(profiles = {"datasource-local", "h2db-local"})
+@ActiveProfiles(profiles = {"datasource-prod", "mysql-prod"})
 @DataJpaTest
-@DisplayName("[RefreshTokenRepository]")
-class RefreshTokenRepositoryTest {
+@DisplayName("[MySQLRefreshTokenRepositoryTest]")
+class MySQLRefreshTokenRepositoryTest {
     @Autowired RefreshTokenRepository refreshTokenRepository;
 
     @Test @DisplayName("[findByProviderAndPrincipalName][정상]")

@@ -21,10 +21,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Slf4j
-@ActiveProfiles(profiles = {"datasource-local", "h2db-local"})
+@ActiveProfiles(profiles = {"datasource-prod", "mysql-prod"})
 @DataJpaTest
-@DisplayName("[AgentRepository]")
-class AgentRepositoryTest {
+@DisplayName("[MySQLAgentRepositoryTest]")
+class MySQLAgentRepositoryTest {
     @Autowired
     private AgentRepository agentRepository;
 
@@ -62,8 +62,7 @@ class AgentRepositoryTest {
         log.info("e.getMessage()\n{}", message);
         assertThat(message).isEqualTo("""
                 could not execute statement [Unique index or primary key violation: "PUBLIC.CONSTRAINT_INDEX_3 ON PUBLIC.AGENT(EMAIL NULLS FIRST) VALUES ( /* 100 */ 'mock email' )"; SQL statement:
-                insert into agent (created_at,email,introduction,nickname,password,profile_image,id) values (?,?,?,?,?,?,default) [23505-214]] [insert into agent (created_at,email,introduction,nickname,password,profile_image,id) values (?,?,?,?,?,?,default)]; SQL [insert into agent (created_at,email,introduction,nickname,password,profile_image,id) values (?,?,?,?,?,?,default)]; constraint ["PUBLIC.CONSTRAINT_INDEX_3 ON PUBLIC.AGENT(EMAIL NULLS FIRST) VALUES ( /* 100 */ 'mock email' )"; SQL statement:
-                insert into agent (created_at,email,introduction,nickname,password,profile_image,id) values (?,?,?,?,?,?,default) [23505-214]]
+                insert into agent (created_at,email,introduction,nickname,password,profile_image) values (?,?,?,?,?,?) [23505-214]] [insert into agent (created_at,email,introduction,nickname,password,profile_image) values (?,?,?,?,?,?)]; SQL [insert into agent (created_at,email,introduction,nickname,password,profile_image) values (?,?,?,?,?,?)]; constraint [null]
                 """.trim());
     }
 

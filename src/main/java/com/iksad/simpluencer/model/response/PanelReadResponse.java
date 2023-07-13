@@ -20,7 +20,7 @@ public record PanelReadResponse(
                 .frontName(type.getFrontName())
                 .icon(type.getIcon())
                 .description(entity.getDescription())
-                .email(entity.getEmail())
+                .email(entity.getAccount())
                 .build();
     }
 }

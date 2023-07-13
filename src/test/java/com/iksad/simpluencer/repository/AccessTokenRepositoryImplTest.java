@@ -29,9 +29,9 @@ class AccessTokenRepositoryImplTest {
         AccessToken token = new AccessToken();
         token.setProvider("GOOGLE");
         token.setPrincipalName("1234566543566542");
-        token.setAccessToken("3huri4j4jrigugfduwikme");
-        token.setIssuedAtAccessToken(Instant.now());
-        token.setExpiresAtAccessToken(Instant.now().plus(4345L, ChronoUnit.SECONDS));
+        token.setToken("3huri4j4jrigugfduwikme");
+        token.setIssuedAt(Instant.now());
+        token.setExpiresAt(Instant.now().plus(4345L, ChronoUnit.SECONDS));
 
         // When
         accessTokenRepository.save(token);
@@ -39,7 +39,7 @@ class AccessTokenRepositoryImplTest {
         // then
         Optional<AccessToken> accessToken = accessTokenRepository.findByProviderAndPrincipalName(token.getProvider(), token.getPrincipalName());
         assertThat(accessToken.isPresent()).isTrue();
-        log.info(accessToken.get().getAccessToken());
+        log.info(accessToken.get().getToken());
     }
 
     @Test @DisplayName("[deleteByProviderAndPrincipalName][정상]")
@@ -48,9 +48,9 @@ class AccessTokenRepositoryImplTest {
         AccessToken token = new AccessToken();
         token.setProvider("GOOGLE");
         token.setPrincipalName("1234566543566542");
-        token.setAccessToken("3huri4j4jrigugfduwikme");
-        token.setIssuedAtAccessToken(Instant.now());
-        token.setExpiresAtAccessToken(Instant.now().plus(4345L, ChronoUnit.SECONDS));
+        token.setToken("3huri4j4jrigugfduwikme");
+        token.setIssuedAt(Instant.now());
+        token.setExpiresAt(Instant.now().plus(4345L, ChronoUnit.SECONDS));
 
         // When
         accessTokenRepository.deleteByProviderAndPrincipalName(token.getProvider(), token.getPrincipalName());

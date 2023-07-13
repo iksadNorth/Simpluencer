@@ -3,4 +3,4 @@ spring:
     default: local
     group:
       local: thymeleaf-local, datasource-local, h2db-local, email-local, oauth-local, jpa-local, server-local, image-bucket-local, redis-local
-      prod: thymeleaf-prod
+      prod: thymeleaf-prod, datasource-local, mysql-prod, email-prod, oauth-prod, jpa-prod, server-prod, image-bucket-prod, redis-prod

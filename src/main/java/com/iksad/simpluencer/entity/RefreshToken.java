@@ -20,10 +20,9 @@ public class RefreshToken extends BaseEntity {
 
     private String principalName;
 
-    @Column(unique = true)
-    private String refreshToken;
+    private String token;
 
-    private Instant issuedAtRefreshToken;
+    private Instant issuedAt;
 
-    private Instant expiresAtRefreshToken;
+    private Instant expiresAt;
 }

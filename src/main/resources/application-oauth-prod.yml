@@ -1,0 +1,8 @@
+spring.security.oauth2.client:
+  registration:
+    GOOGLE:
+      client-id: ${GOOGLE_OAUTH_CLIENT_ID}
+      client-secret: ${GOOGLE_OAUTH_SECRET}
+    REDDIT:
+      client-id: ${REDDIT_OAUTH_CLIENT_ID}
+      client-secret: ${REDDIT_OAUTH_SECRET}

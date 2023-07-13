@@ -15,10 +15,10 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
-@ActiveProfiles(profiles = {"datasource-local", "h2db-local"})
+@ActiveProfiles(profiles = {"datasource-prod", "mysql-prod"})
 @DataJpaTest
-@DisplayName("[PanelRepository]")
-class PanelRepositoryTest {
+@DisplayName("[MySQLPanelRepositoryTest]")
+class MySQLPanelRepositoryTest {
     @Autowired PanelRepository panelRepository;
 
     @Sql(scripts = {"classpath:/data_init/create_panel.sql"})

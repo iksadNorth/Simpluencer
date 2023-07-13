@@ -25,7 +25,7 @@ public class Panel extends BaseEntity {
 
     private String description;
 
-    private String email;
+    private String account;
 
     private int location;
 }
