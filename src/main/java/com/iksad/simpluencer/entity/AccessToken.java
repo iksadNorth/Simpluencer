@@ -13,9 +13,9 @@ public class AccessToken implements Serializable {
 
     private String principalName;
 
-    private String accessToken;
+    private String token;
 
-    private Instant issuedAtAccessToken;
+    private Instant issuedAt;
 
-    private Instant expiresAtAccessToken;
+    private Instant expiresAt;
 }

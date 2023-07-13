@@ -34,7 +34,7 @@ public class OAuth2TokenManagerImpl implements OAuth2TokenManager {
         // 유효하면 그대로 출력.
         // 유효하지 않으면 refresh token으로 access token 로드 후 출력.
         return optionalAccessToken.filter(OAuth2TokenManagerImpl::isAccessTokenValid)
-                .map(AccessToken::getAccessToken)
+                .map(AccessToken::getToken)
                 .orElseGet(() -> this.getAccessTokenWhenAccessTokenNotExist(clientRegistration, providerName, principalName));
     }
 
@@ -49,7 +49,7 @@ public class OAuth2TokenManagerImpl implements OAuth2TokenManager {
 
     private String loadRefreshTokenByProviderAndPrincipalName(String providerName, String principalName) {
         return refreshTokenRepository.findByProviderAndPrincipalName(providerName, principalName)
-                .map(RefreshToken::getRefreshToken)
+                .map(RefreshToken::getToken)
                 .orElseThrow(RefreshTokenNotFoundType::new);
     }
 
@@ -63,6 +63,6 @@ public class OAuth2TokenManagerImpl implements OAuth2TokenManager {
             return false;
         }
         Instant now = Instant.now();
-        return token.getExpiresAtAccessToken().isAfter(now);
+        return token.getExpiresAt().isAfter(now);
     }
 }

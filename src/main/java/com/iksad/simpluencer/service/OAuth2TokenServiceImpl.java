@@ -64,7 +64,7 @@ public class OAuth2TokenServiceImpl implements OAuth2TokenService {
         entity.setAgent(principal);
         entity.setProvider(authenticatedResponse.clientRegistration().getRegistrationId());
         entity.setPrincipalName(authenticatedResponse.userInfoResponse().principalName());
-        entity.setEmail(authenticatedResponse.userInfoResponse().account());
+        entity.setAccount(authenticatedResponse.userInfoResponse().account());
         entity.setLocation(Integer.MAX_VALUE);
 
         return panelRepository.save(entity);

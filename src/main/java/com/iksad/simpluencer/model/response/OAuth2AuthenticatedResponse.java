@@ -25,9 +25,9 @@ public record OAuth2AuthenticatedResponse(
         entity.setProvider(clientRegistration.getRegistrationId());
         entity.setPrincipalName(userInfoResponse.principalName());
 
-        entity.setAccessToken(tokenResponse.accessToken());
-        entity.setIssuedAtAccessToken(now);
-        entity.setExpiresAtAccessToken(now.plus(Duration.of(tokenResponse.expiresIn(), OAuth2TokenResponse.TIME_UNIT)));
+        entity.setToken(tokenResponse.accessToken());
+        entity.setIssuedAt(now);
+        entity.setExpiresAt(now.plus(Duration.of(tokenResponse.expiresIn(), OAuth2TokenResponse.TIME_UNIT)));
 
         return entity;
     }
@@ -43,9 +43,9 @@ public record OAuth2AuthenticatedResponse(
         entity.setProvider(clientRegistration.getRegistrationId());
         entity.setPrincipalName(userInfoResponse.principalName());
 
-        entity.setRefreshToken(tokenResponse.refreshToken());
-        entity.setIssuedAtRefreshToken(now);
-        entity.setExpiresAtRefreshToken(null);
+        entity.setToken(tokenResponse.refreshToken());
+        entity.setIssuedAt(now);
+        entity.setExpiresAt(null);
 
         return entity;
     }
