@@ -28,4 +28,6 @@ public class Panel extends BaseEntity {
     private String account;
 
     private int location;
+
+    private String link;
 }

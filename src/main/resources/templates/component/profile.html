@@ -192,7 +192,7 @@
 <div th:fragment="panel" class="block" th:id="|panel_${panel.id}|">
     <div class="card tada">
         <div class="row g-0">
-            <div class="col-md-4">
+            <div class="col-md-4 clickable" th:data-link="${panel.link ?: '#'}" onclick="navigateTo(this.getAttribute('data-link'))">
                 <svg
                         class="bd-placeholder-img"
                         width="100%" height="150"

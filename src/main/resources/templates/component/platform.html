@@ -42,9 +42,20 @@
                     <p class="card-title text-secondary" th:text="${panel.email}">
                         Email
                     </p>
+                    <th:block th:if="${#strings.isEmpty(panel.link)}">
+                        <p th:id="|card_platform_${panel.id}_link|" class="card-text pos text-secondary">
+                            링크 입력란
+                        </p>
+                    </th:block>
+                    <th:block th:unless="${#strings.isEmpty(panel.link)}">
+                        <p th:id="|card_platform_${panel.id}_link|" th:text="${panel.link}" class="card-text pos text-secondary">
+                            Link
+                        </p>
+                    </th:block>
+                    <input th:id="|card_platform_${panel.id}_text_link|" type="text" class="card-text neg hidden" th:value="${panel.link}">
                     <th:block th:if="${#strings.isEmpty(panel.description)}">
                         <p th:id="|card_platform_${panel.id}_label|" class="card-text pos">
-                            Description
+                            상세 설명 기입란
                         </p>
                     </th:block>
                     <th:block th:unless="${#strings.isEmpty(panel.description)}">
@@ -93,9 +104,14 @@
             const labelElement = document.getElementById([[|card_platform_${panel.id}_label|]]);
             labelElement.innerText = textElement.value;
 
+            const textLinkElement = document.getElementById([[|card_platform_${panel.id}_text_link|]]);
+            const linkElement = document.getElementById([[|card_platform_${panel.id}_link|]]);
+            linkElement.innerText = textLinkElement.value;
+
             patch(`/api/v1/panel/[[${panel.id}]]`, {
                 body: JSON.stringify({
                     description: labelElement.innerText,
+                    link: linkElement.innerText,
                 }),
             }).then(reloadPage).catch(doWhenErr);
         }
