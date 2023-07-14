@@ -12,6 +12,13 @@
         <meta id="_csrf" th:content="${_csrf.token}"/>
         <!--    세련된 영어 폰트-->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald" type="text/css">
+        <script th:inline="javascript">
+            // 백엔드 서버 접두사 추가.
+            function addBaseUrl(url) {
+                const origin = /*[[|${server.schema}://${server.origin}|]]*/;
+                return `${origin}${url}`;
+            }
+        </script>
     </div>
 
     <div th:fragment="header">
@@ -99,7 +106,7 @@
                           <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
                         </svg>
                     </span>
-                    <input type="text" class="form-control" disabled th:value="|@{/profile/read}/${principal.id}|">
+                    <input type="text" class="form-control" disabled th:value="|${server.schema}://${server.origin}/profile/read/${principal.id}|">
                 </div>
             </div>
         </div>
@@ -110,7 +117,7 @@
             }
 
             function copyToClipboard() {
-                const link = "[[|/profile/read/${principal?.id}|]]";
+                const link = "[[|${server.origin}/profile/read/${principal?.id}|]]";
                 window.navigator.clipboard.writeText(link);
                 doWhenErr("링크 복사 완료!");
             }

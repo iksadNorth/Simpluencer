@@ -1,4 +1,6 @@
 server:
   schema: http
-  address: localhost
+  address: was
   port: 8080
+
+  origin: localhost

@@ -1,1 +1,1 @@
-bucket.image.path: ${BUCKET_IMAGE_PATH}
+bucket.image.path: /src/img
