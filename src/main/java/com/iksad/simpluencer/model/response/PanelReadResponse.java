@@ -10,7 +10,8 @@ public record PanelReadResponse(
         String frontName,
         String icon,
         String description,
-        String email
+        String email,
+        String link
 ) {
     public static PanelReadResponse of(Panel entity) {
         String provider = entity.getProvider();
@@ -21,6 +22,7 @@ public record PanelReadResponse(
                 .icon(type.getIcon())
                 .description(entity.getDescription())
                 .email(entity.getAccount())
+                .link(entity.getLink())
                 .build();
     }
 }
