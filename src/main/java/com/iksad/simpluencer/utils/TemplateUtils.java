@@ -20,7 +20,7 @@ public class TemplateUtils {
         HashMap<String, String> templateTable = new HashMap<>();
 
         ServerProperties serverProperties = args.serverProperties();
-        String baseUrl = String.format("%s://%s:%s", serverProperties.getSchema(), serverProperties.getAddress(), serverProperties.getPort());
+        String baseUrl = String.format("%s://%s", serverProperties.getSchema(), serverProperties.getOrigin());
         templateTable.put("baseUrl", baseUrl);
 
         OAuth2ProviderType nameForRedirectUrl = OAuth2ProviderType.valueOf(args.registrationId());

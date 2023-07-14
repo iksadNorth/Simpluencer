@@ -13,4 +13,6 @@ public class ServerProperties {
     private String schema;
     private String address;
     private int port;
+
+    private String origin;
 }

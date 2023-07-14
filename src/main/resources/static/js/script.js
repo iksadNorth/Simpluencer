@@ -8,11 +8,6 @@ function hasSomethingInString(str) {
     return (isNotBlank(str) && str.trim()!=='');
 };
 
-// 백엔드 서버 접두사 추가.
-function addBaseUrl(url) {
-    return `http://localhost:8080${url}`
-}
-
 // 쿠키에서 값을 가져오는 함수
 function getCookie(name) {
     const value = `; ${document.cookie}`;
