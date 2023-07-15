@@ -6,3 +6,6 @@ spring.security.oauth2.client:
     REDDIT:
       client-id: ${REDDIT_OAUTH_CLIENT_ID}
       client-secret: ${REDDIT_OAUTH_SECRET}
+    TWITTER:
+      client-id: ${TWITTER_OAUTH_CLIENT_ID}
+      client-secret: ${TWITTER_OAUTH_SECRET}
