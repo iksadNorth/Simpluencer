@@ -1,8 +1,8 @@
 package com.iksad.simpluencer.model;
 
+import com.iksad.simpluencer.Properties.ServerProperties;
 import com.iksad.simpluencer.repository.ClientRegistrationRepository;
 import com.iksad.simpluencer.type.OAuth2ProviderType;
-import com.iksad.simpluencer.utils.OAuthRequestUriUtils;
 import lombok.Builder;
 
 @Builder(toBuilder = true)
@@ -12,12 +12,9 @@ public record PlatformTypeDto(
         String icon,
         String redirectURL
 ) {
-    public static PlatformTypeDto of(OAuth2ProviderType type, ClientRegistrationRepository repository) {
-        String typeProvider = type.getProvider();
-        ClientRegistration clientRegistration = repository.findByRegistrationId(typeProvider);
-        String redirectURL = OAuthRequestUriUtils.getUri(clientRegistration);
+    public static PlatformTypeDto of(OAuth2ProviderType type, String redirectURL) {
         return PlatformTypeDto.builder()
-                .provider(typeProvider)
+                .provider(type.getProvider())
                 .frontName(type.getFrontName())
                 .icon(type.getIcon())
                 .redirectURL(redirectURL)
@@ -25,9 +22,8 @@ public record PlatformTypeDto(
     }
 
     public static PlatformTypeDto of(OAuth2ProviderType type) {
-        String typeProvider = type.getProvider();
         return PlatformTypeDto.builder()
-                .provider(typeProvider)
+                .provider(type.getProvider())
                 .frontName(type.getFrontName())
                 .icon(type.getIcon())
                 .build();

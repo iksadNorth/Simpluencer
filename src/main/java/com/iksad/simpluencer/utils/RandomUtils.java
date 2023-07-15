@@ -19,4 +19,17 @@ public class RandomUtils {
             }
         } return builder.toString();
     }
+
+    public static String getState() {
+        String table = "0123456789abcdefghijklmnopqrstuvwzyxABCEDFGHIJKLMNOPQRSTUVWXZY";
+        int length = table.length();
+
+        StringBuilder builder = new StringBuilder();
+        Random random = new Random();
+        for(int i=0; i < 16; i++) {
+            int index = random.nextInt(length);
+
+            builder.append(table.charAt(index));
+        } return builder.toString();
+    }
 }

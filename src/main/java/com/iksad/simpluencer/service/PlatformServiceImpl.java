@@ -1,5 +1,8 @@
 package com.iksad.simpluencer.service;
 
+import com.iksad.simpluencer.OAuth2.OAuthRequestUriSupplier;
+import com.iksad.simpluencer.Properties.ServerProperties;
+import com.iksad.simpluencer.model.ClientRegistration;
 import com.iksad.simpluencer.model.PlatformTypeDto;
 import com.iksad.simpluencer.repository.ClientRegistrationRepository;
 import com.iksad.simpluencer.type.OAuth2ProviderType;
@@ -15,10 +18,14 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class PlatformServiceImpl implements PlatformService {
     private final ClientRegistrationRepository clientRegistrationRepository;
+    private final ServerProperties serverProperties;
+    private final OAuthRequestUriSupplier oAuthRequestUriSupplier;
 
     public List<PlatformTypeDto> getPlatforms() {
         return Stream.of(OAuth2ProviderType.values())
-                .map(platformType -> PlatformTypeDto.of(platformType, clientRegistrationRepository))
-                .toList();
+                .map(platformType -> {
+                    ClientRegistration clientRegistration = clientRegistrationRepository.findByRegistrationId(platformType.getProvider());
+                    return PlatformTypeDto.of(platformType, oAuthRequestUriSupplier.getUri(clientRegistration, serverProperties));
+                }).toList();
     }
 }

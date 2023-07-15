@@ -38,4 +38,11 @@ public class TemplateUtils {
             template = template.replaceAll(wrap(entry.getKey()), entry.getValue());
         } return template;
     }
+
+    public static String substituteProperties(Args args) {
+        String template = DEFAULT_REDIRECT_URL;
+        for(Map.Entry<String, String> entry : _tables(args).entrySet()) {
+            template = template.replaceAll(wrap(entry.getKey()), entry.getValue());
+        } return template;
+    }
 }

@@ -1,5 +1,7 @@
 package com.iksad.simpluencer.service;
 
+import com.iksad.simpluencer.OAuth2.OAuth2AccessTokenRepository;
+import com.iksad.simpluencer.Properties.ServerProperties;
 import com.iksad.simpluencer.entity.AccessToken;
 import com.iksad.simpluencer.entity.RefreshToken;
 import com.iksad.simpluencer.exception.ErrorType.RefreshTokenNotFoundType;
@@ -7,10 +9,10 @@ import com.iksad.simpluencer.model.ClientRegistration;
 import com.iksad.simpluencer.model.response.OAuth2TokenResponse;
 import com.iksad.simpluencer.repository.AccessTokenRepository;
 import com.iksad.simpluencer.repository.ClientRegistrationRepository;
-import com.iksad.simpluencer.repository.OAuth2AccessTokenRepository;
 import com.iksad.simpluencer.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.Instant;
 import java.util.Optional;
@@ -22,6 +24,8 @@ public class OAuth2TokenManagerImpl implements OAuth2TokenManager {
     private final OAuth2AccessTokenRepository oAuth2AccessTokenRepository;
     private final AccessTokenRepository accessTokenRepository;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final RestTemplate restTemplate;
+    private final ServerProperties serverProperties;
 
     @Override
     public String getAccessToken(String providerName, String principalName) {
@@ -54,7 +58,11 @@ public class OAuth2TokenManagerImpl implements OAuth2TokenManager {
     }
 
     private String getAccessTokenByRefreshToken(ClientRegistration clientRegistration, String refreshToken) {
-        OAuth2TokenResponse tokenResponse = oAuth2AccessTokenRepository.getAccessTokenByRefreshCode(clientRegistration, refreshToken);
+        OAuth2AccessTokenRepository.Args args = OAuth2AccessTokenRepository.Args.builder()
+                .restTemplate(restTemplate)
+                .serverProperties(serverProperties)
+                .build();
+        OAuth2TokenResponse tokenResponse = oAuth2AccessTokenRepository.getByRefreshToken(refreshToken, clientRegistration, args);
         return tokenResponse.accessToken();
     }
 

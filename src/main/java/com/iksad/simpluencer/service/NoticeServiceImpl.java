@@ -6,7 +6,7 @@ import com.iksad.simpluencer.exception.ErrorType.NoticeNotFoundType;
 import com.iksad.simpluencer.model.WebApiNoticeCreateDto;
 import com.iksad.simpluencer.model.request.NoticeCreateRequest;
 import com.iksad.simpluencer.model.response.NoticeReadResponse;
-import com.iksad.simpluencer.repository.NoticeApiRepository.NoticeApiRepository;
+import com.iksad.simpluencer.OAuth2.NoticeApiRepository;
 import com.iksad.simpluencer.repository.NoticeRepository;
 import com.iksad.simpluencer.repository.PanelRepository;
 import com.iksad.simpluencer.utils.VarInspectUtils;
@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -27,6 +28,8 @@ public class NoticeServiceImpl implements NoticeService {
     private final PanelRepository panelRepository;
     private final ImageService imageService;
     private final NoticeApiRepository noticeApiRepository;
+    private final RestTemplate restTemplate;
+    private final OAuth2TokenManager oAuth2TokenManager;
 
     @Override
     public void create(Long agentId, NoticeCreateRequest request) {
@@ -50,7 +53,11 @@ public class NoticeServiceImpl implements NoticeService {
 
         Long[] panelIds = request.platforms();
         List<Panel> panelsSelected = panelRepository.findAllById(List.of(panelIds));
-        panelsSelected.forEach(panel -> noticeApiRepository.createNotice(panel, noticeCreateDto));
+        NoticeApiRepository.Args args = NoticeApiRepository.Args.builder()
+                .oAuth2TokenManager(oAuth2TokenManager)
+                .restTemplate(restTemplate)
+                .build();
+        panelsSelected.forEach(panel -> noticeApiRepository.createNotice(panel, noticeCreateDto, args));
 
         // 공지 테이블에 저장.
         String content = request.content();
