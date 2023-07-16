@@ -21,7 +21,7 @@ public class OAuth2AccessTokenRepositoryImpl implements OAuth2AccessTokenReposit
     private String getRedirectUri(ServerProperties serverProperties) {
         return TemplateUtils.substituteProperties(TemplateUtils.Args.builder()
                 .serverProperties(serverProperties)
-                .registrationId(OAuth2ProviderType.REDDIT.getProviderNameForRedirectUrl())
+                .registrationId(OAuth2ProviderType.REDDIT.getProvider())
                 .build());
     }
 

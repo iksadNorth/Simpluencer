@@ -10,6 +10,6 @@ import java.util.Optional;
 public interface AgentRepository extends JpaRepository<Agent, Long> {
     Optional<Agent> findByEmail(String username);
 
-    @Query("SELECT a FROM Agent a JOIN FETCH a.panels p WHERE a.id = :id ORDER BY p.location")
+    @Query("SELECT a FROM Agent a LEFT JOIN FETCH a.panels p WHERE a.id = :id ORDER BY p.location")
     Optional<Agent> findWithPanelsById(Long id);
 }

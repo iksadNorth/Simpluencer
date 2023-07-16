@@ -86,7 +86,7 @@
         <div th:id="|platform-btn-${panel.id}|" th:panelid="${panel.id}"
              class="platform selected text-center"
              th:onclick="|toggleHandler('platform-btn-${panel.id}')|"
-             th:text="${panel.description}"
+             th:text="${panel.description ?: panel.email}"
         >
             Description
         </div>

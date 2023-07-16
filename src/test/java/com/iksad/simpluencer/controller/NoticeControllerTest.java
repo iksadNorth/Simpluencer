@@ -36,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class NoticeControllerTest {
     @Autowired private MockMvc mvc;
     @Autowired private ObjectMapper objectMapper;
-    @InjectMocks private PanelApiController panelApiController;
+    @InjectMocks private NoticeController noticeController;
     @MockBean NoticeService noticeService;
     @MockBean PanelService panelService;
 
@@ -94,6 +94,40 @@ class NoticeControllerTest {
                 .andExpect(content().string(containsString(takeNiceHistory)))
 
                 .andExpect(content().string(containsString(hasNext)))
+                .andDo(print());
+    }
+
+    @WithMockPrincipal
+    @Test @DisplayName("[notice][정상] description이 없다면 account 내용을 띄운다.")
+    void noticeWithoutDescription() throws Exception {
+        // Given
+        NoticeReadResponse noticeReadResponse = NoticeReadResponse.builder()
+                .id(1L)
+                .image("mock_image.jpg")
+                .content("mock content")
+                .build();
+        PageRequest pageRequest = PageRequest.of(3, 2);
+        SliceImpl<NoticeReadResponse> noticeReadResponses = new SliceImpl<NoticeReadResponse>(
+                List.of(noticeReadResponse,noticeReadResponse), pageRequest, true
+        );
+
+        given(noticeService.read(any(), any())).willReturn(noticeReadResponses);
+
+        PanelReadResponse panelReadResponse = PanelReadResponse.builder()
+                .id(1L)
+                .frontName("mock name")
+                .icon("mock_icon")
+                .email("mock account")
+                .description(null)
+                .build();
+        given(panelService.getPanelsOf(any())).willReturn(List.of(panelReadResponse));
+
+        // When & Then
+        String description = String.format("%s", panelReadResponse.email());
+
+        tools.getView("/notice/create")
+                .andExpect(view().name("notice"))
+                .andExpect(content().string(containsString(description)))
                 .andDo(print());
     }
 }

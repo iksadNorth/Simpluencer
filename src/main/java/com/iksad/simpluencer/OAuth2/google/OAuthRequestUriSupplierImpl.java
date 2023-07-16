@@ -21,7 +21,7 @@ public class OAuthRequestUriSupplierImpl implements OAuthRequestUriSupplier {
 
     @Override
     public String getUri(ClientRegistration clientRegistration, ServerProperties serverProperties) {
-        String registrationId = OAuth2ProviderType.REDDIT.getProviderNameForRedirectUrl();
+        String registrationId = OAuth2ProviderType.GOOGLE.getProvider();
 
         String redirectUrl = TemplateUtils.substituteProperties(TemplateUtils.Args.builder()
                         .serverProperties(serverProperties)
