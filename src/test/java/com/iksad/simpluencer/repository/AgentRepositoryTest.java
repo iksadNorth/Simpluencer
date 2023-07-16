@@ -119,4 +119,18 @@ class AgentRepositoryTest {
         assertThat(optional.isPresent()).isTrue();
 
     }
+
+    @Sql(scripts = {"classpath:/data_init/create_agent.sql"})
+    @Test @DisplayName("[findWithPanelsById][정상] 만약 panel이 1개도 존재하지 않는 사용자에 대한 조회 여부 확인.")
+    void findWithPanelsByIdIfNoPanel() {
+        // Given
+        long id = 100L;
+
+        // When
+        Optional<Agent> optional = agentRepository.findWithPanelsById(id);
+
+        // then
+        assertThat(optional.isPresent()).isTrue();
+
+    }
 }
